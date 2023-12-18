@@ -7,8 +7,9 @@
 #endif
 
 #include <addons/TokenHelper.h>
-
 #include <addons/RTDBHelper.h>
+
+#include "DHT.h"
 
 // #define WIFI_SSID "Innovation 2.4GHz"
 // #define WIFI_PASSWORD "Passw0rd@1"
@@ -35,21 +36,34 @@ FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 
-#define water 33
-#define pump 25
+#define waterXKC 33
+#define re4 25
 #define re1 32
 #define re2 27
 #define re3 14
 
-int a1, a2, b1, b2, c1, c2;
-int x1, x2, y3, y2, z1, z2;
-int a3, b3, c3;
+#define waterHW 15
+
+#define DHTPIN 0
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+int sensorValue = 0;
+
+float a1, b1;
+float h, t;
+
+String Humi, Temp;
+
+bool c1, re1state, re2state;
+bool re4state = false;
 
 void setup() {
   Serial.begin(115200);
 
-  pinMode(water, INPUT_PULLDOWN);
-  pinMode(pump, OUTPUT);
+  // pinMode(waterHW, INPUT);
+  pinMode(waterXKC, INPUT_PULLDOWN);
+  pinMode(re4, OUTPUT);
   pinMode(re1, OUTPUT);
   pinMode(re2, OUTPUT);
   pinMode(re3, OUTPUT);
@@ -57,7 +71,7 @@ void setup() {
   digitalWrite(re2, 1);
   digitalWrite(re3, 1);
 
-  delay(2000);
+  delay(1000);
 
   ////// Configures static IP address//////////////////////////////
   if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
@@ -88,110 +102,103 @@ void setup() {
 
   Firebase.begin(DATABASE_URL, API_KAY);
   Firebase.setDoubleDigits(5);
+
+  // Serial.println(F("DHTxx test!"));
+  dht.begin();
+}
+
+void ReadHumiTemp() {
+  // Wait a few seconds between measurements.
+  delay(2000);
+
+  // อ่านค่าความชื้น
+  h = dht.readHumidity();
+  // อ่านอุณหภูมิเป็นเซลเซียส (ค่าเริ่มต้น)
+  t = dht.readTemperature();
+  // // อ่านอุณหภูมิเป็นฟาเรนไฮต์ (isFahrenheit = true)
+  // float f = dht.readTemperature(true);
+
+  // ตรวจสอบว่าการอ่านล้มเหลวและออกก่อนกําหนดหรือไม่ (เพื่อลองอีกครั้ง)
+  if (isnan(h) || isnan(t)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  // // คํานวณดัชนีความร้อนเป็นฟาเรนไฮต์ (ค่าเริ่มต้น)
+  // float hif = dht.computeHeatIndex(f, h);
+  // คํานวณดัชนีความร้อนเป็นเซลเซียส (isFahreheit = false)
+  // float hic = dht.computeHeatIndex(t, h, false);
+
+  Serial.print(F("Humidity: "));
+  Serial.print(h);
+  Serial.print(F("% Temperature: "));
+  Serial.print(t);
+  Serial.println(F(" C "));
 }
 
 void WaterLevel() {
   //ควบุมระดับน้ำ เปิดน้ำเมื่อลดต่ำกว่ากำหนด
-  if (digitalRead(water) > 0) {
-    digitalWrite(pump, HIGH);
-    Serial.println("pump off");
+  if (digitalRead(waterXKC) > 0) {
+    digitalWrite(re4, HIGH);
+    Serial.println("re4 off");
+    re4state = false;
 
-  } else if (digitalRead(water) == 0) {
-    digitalWrite(pump, LOW);
-    Serial.println("pump on");
+  } else if (digitalRead(waterXKC) == 0) {
+    digitalWrite(re4, LOW);
+    Serial.println("re4 on");
+    re4state = true;
+  }
+}
+
+void WaterSensor() {
+  sensorValue = analogRead(waterHW);
+  Serial.printf("WaterSensor --> ");
+  Serial.println(sensorValue);
+
+  if (sensorValue > 1000) {
+    digitalWrite(re1, LOW);
+    Serial.println("re1 on");
+    re1state = true;
+  } else {
+    digitalWrite(re1, HIGH);
+    Serial.println("re1 off");
+    re1state = false;
   }
 }
 
 void loop() {
-  x1 = random(0, 2);
-  y3 = random(11, 13);
-  z1 = random(21, 23);
-  x2 = random(31, 33);
-  y2 = random(41, 43);
-  z2 = random(51, 53);
-
+  WaterSensor();
+  delay(50);
   WaterLevel();
+  delay(50);
+  ReadHumiTemp();
+  delay(50);
+
 
   if (Firebase.ready()) {
+    Firebase.setFloat(fbdo, "/Humidity", h);  //ตอนออกต้องเป็น %
+    delay(50);
+    Firebase.setFloat(fbdo, "/Temperature", t);
+    delay(50);
+    Firebase.setBool(fbdo, "/relay1state/re1", re1state);
+    delay(50);
+    Firebase.setBool(fbdo, "/relay1state/re4", re4state);
+    delay(50);
 
-    Firebase.setInt(fbdo, "/test/a", x1);
-    Firebase.setInt(fbdo, "/test/b", y3);
-    Firebase.setInt(fbdo, "/test/c", z1);
 
-    Firebase.setInt(fbdo, "/test2/a", x2);
-    Firebase.setInt(fbdo, "/test2/b", y2);
-    Firebase.setInt(fbdo, "/test2/c", z2);
+    Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+    // a1 = fbdo.to<float>();
+    Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+    // b1 = fbdo.to<float>();
+    Serial.printf("Get bool re1 -->  %s\n", Firebase.getBool(fbdo, "relay1state/re1") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    // c1 = fbdo.to<bool>();
+    Serial.printf("Get bool re4 -->  %s\n", Firebase.getBool(fbdo, "relay1state/re4") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
 
-    Serial.printf("Get int a1 -->  %s\n", Firebase.getInt(fbdo, "/test/a") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    a1 = fbdo.to<int>();
-    Serial.printf("Get int b1 -->  %s\n", Firebase.getInt(fbdo, "/test/b") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    b1 = fbdo.to<int>();
-    Serial.printf("Get int c1 -->  %s\n", Firebase.getInt(fbdo, "/test/c") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    c1 = fbdo.to<int>();
-
-    Serial.println();
-
-    Serial.printf("Get int a2 -->  %s\n", Firebase.getInt(fbdo, "/test2/a") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    a2 = fbdo.to<int>();
-    Serial.printf("Get int b2 -->  %s\n", Firebase.getInt(fbdo, "/test2/b") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    b2 = fbdo.to<int>();
-    Serial.printf("Get int c2 -->  %s\n", Firebase.getInt(fbdo, "/test2/c") ? String(fbdo.to<int>()).c_str() : fbdo.errorReason().c_str());
-    c2 = fbdo.to<int>();
-    delay(1000);
-
-    a3 = a1 + a2;
-    b3 = b1 * b2;
-    c3 = c2 - c1;
-
-    Serial.println();
-
-    if (a1 == 0) {
-      digitalWrite(re1, 0);
-      Serial.println("LED1 ON");
-      delay(500);
-    }
-    if (b1 == 11) {
-      digitalWrite(re2, 0);
-      Serial.println("LED2 ON");
-      delay(500);
-    }
-    if (c1 == 21) {
-      digitalWrite(re3, 0);
-      Serial.println("LED3 ON");
-      delay(500);
-    }
-    if (a1 == 1) {
-      digitalWrite(re1, 1);
-      Serial.println("LED1 OFF");
-      delay(500);
-    }
-    if (b1 == 12) {
-      digitalWrite(re2, 1);
-      Serial.println("LED2 OFF");
-      delay(500);
-    }
-    if (c1 == 22) {
-      digitalWrite(re3, 1);
-      Serial.println("LED3 OFF");
-      delay(500);
-    }
-
-    Serial.println();
-    Serial.print("a1 + a2 = ");
-    Serial.println(a3);
-    Serial.print("b1 * b2 = ");
-    Serial.println(b3);
-    Serial.print("c2 - c1 = ");
-    Serial.println(c3);
 
     delay(1000);
-    Firebase.setInt(fbdo, "/test3/a", a3);
-    Firebase.setInt(fbdo, "/test3/b", b3);
-    Firebase.setInt(fbdo, "/test3/c", c3);
-
-    // Serial.println();
+    Serial.println();
     Serial.println("-------------------------------------");
-    Serial.println();
-    delay(10000);
+
+    delay(1000);
   }
 }
