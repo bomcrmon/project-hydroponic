@@ -59,8 +59,8 @@ float h, t;
 
 String Humi, Temp;
 
-bool fan, led, re1state, re2state, re3state, re4state;
-
+bool fan, led, sprinkler, re1state, re2state, re3state, re4state;
+bool waterstate, fertilizersstate;
 
 void setup() {
   Serial.begin(115200);
@@ -153,20 +153,30 @@ void ReadHumiTemp() {
   Serial.println(F(" C "));
 }
 
+void NFPUMP(bool state, int relay) {
+  if (state == true) {
+    digitalWrite(relay, LOW);
+    Serial.println("pin " + String(relay) + " on");
+  } else {
+    digitalWrite(relay, HIGH);
+    Serial.println("pin " + String(relay) + " off");
+  }
+}
+
 void WaterLevel() {
   //ควบุมระดับน้ำ เปิดน้ำเมื่อลดต่ำกว่ากำหนด
   if (digitalRead(waterXKC) > 0) {
-    digitalWrite(re4, HIGH);
-    Serial.println("re4 off");
-    re4state = false;
+    // digitalWrite(re4, HIGH);
+    // Serial.println("re4 off");
+    waterstate = false;
 
   } else if (digitalRead(waterXKC) == 0) {
-    digitalWrite(re4, LOW);
-    Serial.println("re4 on");
-    re4state = true;
+    // digitalWrite(re4, LOW);
+    // Serial.println("re4 on");
+    waterstate = true;
   }
 }
-void WaterSensor() {
+void fertilizerSensor() {
   sensorValue = analogRead(waterHW);
   delay(50);
   float waterLevel = map(sensorValue, 0, 3500, 0, 100);
@@ -177,11 +187,11 @@ void WaterSensor() {
   if (waterLevel > 50) {
     digitalWrite(re1, LOW);
     Serial.println("re1 on");
-    re1state = true;
+    fertilizersstate = true;
   } else {
     digitalWrite(re1, HIGH);
     Serial.println("re1 off");
-    re1state = false;
+    fertilizersstate = false;
   }
 }
 void SetLed() {
@@ -204,9 +214,12 @@ void SetFan() {
 }
 
 void loop() {
-  WaterSensor();
+
+  fertilizerSensor();
   delay(50);
   WaterLevel();
+  delay(50);
+  NFPUMP(waterstate, re4);
   delay(50);
   ReadHumiTemp();
   delay(50);
@@ -217,11 +230,10 @@ void loop() {
     delay(50);
     Firebase.setFloat(fbdo, "/Temperature", t);
     delay(50);
-    Firebase.setBool(fbdo, "/relay1state/re1", re1state);
+    Firebase.setBool(fbdo, "/relaystate/fertilizersstate", fertilizersstate);
     delay(50);
-    Firebase.setBool(fbdo, "/relay1state/re4", re4state);
+    Firebase.setBool(fbdo, "/relaystate/waterstate", waterstate);
     delay(50);
-
 
 
 
@@ -229,13 +241,13 @@ void loop() {
     // a1 = fbdo.to<float>();
     Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
     // b1 = fbdo.to<float>();
-    Serial.printf("Get bool re1 -->  %s\n", Firebase.getBool(fbdo, "/relay1state/re1") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    Serial.printf("Get bool fertilizersstate -->  %s\n", Firebase.getBool(fbdo, "/relaystate/fertilizersstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
     // c1 = fbdo.to<bool>();
-    Serial.printf("Get bool re4 -->  %s\n", Firebase.getBool(fbdo, "/relay1state/re4") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-
-    Serial.printf("Get bool led -->  %s\n", Firebase.getBool(fbdo, "/led") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    Serial.printf("Get bool waterstate -->  %s\n", Firebase.getBool(fbdo, "/relaystate/waterstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    waterstate = fbdo.to<bool>();
+    Serial.printf("Get bool led -->  %s\n", Firebase.getBool(fbdo, "/relaystate/led") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
     led = fbdo.to<bool>();
-    Serial.printf("Get bool fan -->  %s\n", Firebase.getBool(fbdo, "/fan") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    Serial.printf("Get bool fan -->  %s\n", Firebase.getBool(fbdo, "/relaystate/fan") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
     fan = fbdo.to<bool>();
 
     SetLed();
