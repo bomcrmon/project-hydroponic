@@ -35,41 +35,57 @@ IPAddress primaryDNS(8, 8, 8, 8);
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
-
+#define waterHW 32
 #define waterXKC 33
-#define re4 25
-#define re1 32
-#define re2 27
-#define re3 14
 
-#define waterHW 15
+#define re1 19
+#define re2 18
+#define re3 5
+#define re4 17
+#define re5 16
+#define re6 4
+#define re7 0
+#define re8 2
 
-#define DHTPIN 0
+
+#define DHTPIN 25
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 
-int sensorValue = 0;
+int sensorValue;
 
 float a1, b1;
 float h, t;
 
 String Humi, Temp;
 
-bool c1, re1state, re2state;
-bool re4state = false;
+bool fan, led, re1state, re2state, re3state, re4state;
+
 
 void setup() {
   Serial.begin(115200);
 
   // pinMode(waterHW, INPUT);
   pinMode(waterXKC, INPUT_PULLDOWN);
-  pinMode(re4, OUTPUT);
+
   pinMode(re1, OUTPUT);
   pinMode(re2, OUTPUT);
   pinMode(re3, OUTPUT);
-  digitalWrite(re1, 1);
-  digitalWrite(re2, 1);
-  digitalWrite(re3, 1);
+  pinMode(re4, OUTPUT);
+
+  pinMode(re5, OUTPUT);
+  pinMode(re6, OUTPUT);
+  pinMode(re7, OUTPUT);
+  pinMode(re8, OUTPUT);
+
+  digitalWrite(re1, 0);
+  digitalWrite(re2, 0);
+  digitalWrite(re3, 0);
+  digitalWrite(re4, 0);
+  digitalWrite(re5, 0);
+  digitalWrite(re6, 0);
+  digitalWrite(re7, 0);
+  digitalWrite(re8, 0);
 
   delay(1000);
 
@@ -105,6 +121,7 @@ void setup() {
 
   // Serial.println(F("DHTxx test!"));
   dht.begin();
+  Serial.begin(115200);
 }
 
 void ReadHumiTemp() {
@@ -149,13 +166,15 @@ void WaterLevel() {
     re4state = true;
   }
 }
-
 void WaterSensor() {
   sensorValue = analogRead(waterHW);
-  Serial.printf("WaterSensor --> ");
-  Serial.println(sensorValue);
-
-  if (sensorValue > 1000) {
+  delay(50);
+  float waterLevel = map(sensorValue, 0, 3500, 0, 100);
+  Serial.printf("WaterLevel --> ");
+  Serial.print(String(waterLevel));
+  Serial.println("%");
+  delay(30);
+  if (waterLevel > 50) {
     digitalWrite(re1, LOW);
     Serial.println("re1 on");
     re1state = true;
@@ -163,6 +182,24 @@ void WaterSensor() {
     digitalWrite(re1, HIGH);
     Serial.println("re1 off");
     re1state = false;
+  }
+}
+void SetLed() {
+  if (led == true) {
+    digitalWrite(re3, LOW);
+    Serial.println("re3 on");
+  } else {
+    digitalWrite(re3, HIGH);
+    Serial.println("re3 off");
+  }
+}
+void SetFan() {
+  if (fan == true) {
+    digitalWrite(re5, LOW);
+    Serial.println("re5 on");
+  } else {
+    digitalWrite(re5, HIGH);
+    Serial.println("re5 off");
   }
 }
 
@@ -174,8 +211,8 @@ void loop() {
   ReadHumiTemp();
   delay(50);
 
-
   if (Firebase.ready()) {
+
     Firebase.setFloat(fbdo, "/Humidity", h);  //ตอนออกต้องเป็น %
     delay(50);
     Firebase.setFloat(fbdo, "/Temperature", t);
@@ -186,14 +223,23 @@ void loop() {
     delay(50);
 
 
+
+
     Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
     // a1 = fbdo.to<float>();
     Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
     // b1 = fbdo.to<float>();
-    Serial.printf("Get bool re1 -->  %s\n", Firebase.getBool(fbdo, "relay1state/re1") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    Serial.printf("Get bool re1 -->  %s\n", Firebase.getBool(fbdo, "/relay1state/re1") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
     // c1 = fbdo.to<bool>();
-    Serial.printf("Get bool re4 -->  %s\n", Firebase.getBool(fbdo, "relay1state/re4") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    Serial.printf("Get bool re4 -->  %s\n", Firebase.getBool(fbdo, "/relay1state/re4") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
 
+    Serial.printf("Get bool led -->  %s\n", Firebase.getBool(fbdo, "/led") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    led = fbdo.to<bool>();
+    Serial.printf("Get bool fan -->  %s\n", Firebase.getBool(fbdo, "/fan") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+    fan = fbdo.to<bool>();
+
+    SetLed();
+    SetFan();
 
     delay(1000);
     Serial.println();
