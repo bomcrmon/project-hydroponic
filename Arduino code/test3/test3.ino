@@ -46,7 +46,10 @@ FirebaseConfig config;
 #define re6 4
 #define re7 14
 #define re8 13
-
+#define re9 21
+#define re10 22
+#define re11 23
+#define re12 15
 
 #define DHTPIN 25
 #define DHTTYPE DHT22
@@ -59,8 +62,9 @@ float h, t;
 
 String Humi, Temp;
 
-bool fan, led, sprinkler, valve, re1state, re2state, re3state, re4state;
-bool Autosystem, waterstate, fertilizersstate, pumpwater, pumpfertilizers;
+bool fan, led, sprinklerwater, valve, re1state, re2state, re3state, re4state;
+bool Autosystem, waterstate, fertilizersstate, pumpwater, sprinklerfertilizers;
+bool pumpphUP, pumpphDown;
 
 void setup() {
   Serial.begin(115200);
@@ -78,6 +82,11 @@ void setup() {
   pinMode(re7, OUTPUT);
   pinMode(re8, OUTPUT);
 
+  pinMode(re9, OUTPUT);
+  pinMode(re10, OUTPUT);
+  pinMode(re11, OUTPUT);
+  pinMode(re12, OUTPUT);
+
   digitalWrite(re1, 1);
   digitalWrite(re2, 1);
   digitalWrite(re3, 1);
@@ -86,6 +95,10 @@ void setup() {
   digitalWrite(re6, 1);
   digitalWrite(re7, 1);
   digitalWrite(re8, 1);
+  digitalWrite(re9, 0);
+  digitalWrite(re10, 0);
+  digitalWrite(re11, 0);
+  digitalWrite(re12, 0);
 
   delay(1000);
 
@@ -225,7 +238,7 @@ void SetValve() {
   }
 }
 void SetSprinkler() {
-  if (sprinkler == true) {
+  if (sprinklerwater == true) {
     digitalWrite(re6, LOW);
     Serial.println("re6 on");
   } else {
@@ -281,8 +294,8 @@ void loop() {
       Serial.println("**************************");
       Serial.println();
 
-      Serial.printf("Get bool pumpfertilizers -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpfertilizers") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      pumpfertilizers = fbdo.to<bool>();
+      Serial.printf("Get bool sprinklerfertilizers -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinklerfertilizers") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      sprinklerfertilizers = fbdo.to<bool>();
       // NFRE(fertilizersstate, re1);
       // delay(50);
       delay(50);
@@ -305,26 +318,48 @@ void loop() {
       fan = fbdo.to<bool>();
       delay(50);
 
-      Serial.printf("Get bool sprinkler -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinkler") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      sprinkler = fbdo.to<bool>();
+      Serial.printf("Get bool sprinklerwater -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinklerwater") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      sprinklerwater = fbdo.to<bool>();
       delay(50);
 
-      NFRE(pumpfertilizers, re1);
+      Serial.printf("Get bool pumpphUP -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpphUP") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      pumpphUP = fbdo.to<bool>();
       delay(50);
 
-      SetValve();
+      Serial.printf("Get bool pumpphDown -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpphDown") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      pumpphDown = fbdo.to<bool>();
       delay(50);
 
-      SetLed();
+      Serial.println();
+      Serial.println("+++++++++++++++++++++++++++");
+      Serial.println();
+
+      NFRE(sprinklerfertilizers, re1);
+      delay(50);
+
+      // SetValve();
+      NFRE(valve, re2);
+      delay(50);
+
+      // SetLed();
+      NFRE(led, re3);
       delay(50);
 
       NFRE(pumpwater, re4);
       delay(50);
 
-      SetFan();
+      // SetFan();
+      NFRE(fan, re5);
       delay(50);
-      
-      SetSprinkler();
+
+      // SetSprinkler();
+      NFRE(sprinklerwater, re6);
+      delay(50);
+
+      NFRE(pumpphUP, re7);
+      delay(50);
+
+      NFRE(pumpphDown, re8);
       delay(50);
 
       delay(1000);
