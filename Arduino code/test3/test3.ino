@@ -200,7 +200,7 @@ void fertilizerSensor() {
   // Serial.print(String(waterLevel));
   // Serial.println("%");
   delay(50);
-  if (waterLevel > 15) {
+  if (waterLevel > 35) {
     // digitalWrite(re1, LOW);
     // Serial.println("re1 on");
     fertilizersstate = true;
@@ -362,7 +362,7 @@ void loop() {
       NFRE(pumpphDown, re8);
       delay(50);
 
-      delay(1000);
+      // delay(1000);
       Serial.println("----------------------------------------------------");
       Serial.println();
       delay(1000);
