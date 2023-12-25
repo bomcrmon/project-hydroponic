@@ -37,6 +37,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 #define waterHW 32
 #define waterXKC 33
+#define phport 32
 
 #define re1 19
 #define re2 18
@@ -54,10 +55,18 @@ FirebaseConfig config;
 #define DHTPIN 25
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
-
+//--------phsensor------------
+// const int phport = 27;
+long phTot;
+float pHValue, phAvg, phVoltage;
+int x;
+float C = 25.85;  //Constant of straight line (Y = mx + C)
+float m = -6.80;  // Slope of straight line (Y = mx + C)
+//----------------------------
+//------fertilizerSensor------
 int sensorValue;
+//----------------------------
 
-float a1, b1;
 float h, t;
 
 String Humi, Temp;
@@ -67,9 +76,8 @@ bool Autosystem, waterstate, fertilizersstate, pumpwater, sprinklerfertilizers;
 bool pumpphUP, pumpphDown;
 
 void setup() {
-  Serial.begin(115200);
-
-  // pinMode(waterHW, INPUT);
+  pinMode(phport, INPUT);
+  pinMode(waterHW, INPUT);
   pinMode(waterXKC, INPUT_PULLDOWN);
 
   pinMode(re1, OUTPUT);
@@ -135,8 +143,29 @@ void setup() {
   // Serial.println(F("DHTxx test!"));
   dht.begin();
   Serial.begin(115200);
+  analogReadResolution(12);
 }
+void PHsensor() {
+  phTot = 0;
+  phAvg = 0;
+  // taking 10 sample and adding with 10 milli second delay
+  for (x = 0; x < 10; x++) {
+    phTot += analogRead(phport);
+    delay(10);
+  }
+  phAvg = phTot / 10;
 
+  phVoltage = phAvg * (3.3 / 4095.0);
+  pHValue = phVoltage * m + C;
+
+  Serial.print("phVoltage = ");
+  Serial.print(phVoltage);
+  Serial.print(" ");
+  Serial.print("pH=");
+  Serial.println(pHValue);
+
+  delay(1000);
+}
 void ReadHumiTemp() {
   // Wait a few seconds between measurements.
   delay(2000);
@@ -263,8 +292,13 @@ void loop() {
     ReadHumiTemp();
     delay(50);
 
+    PHsensor();
+    delay(50);
+
     if (Firebase.ready()) {
 
+      Firebase.setFloat(fbdo, "/pHValue", pHValue);
+      delay(50);
       Firebase.setFloat(fbdo, "/Humidity", h);  //ตอนออกต้องเป็น %
       delay(50);
       Firebase.setFloat(fbdo, "/Temperature", t);
@@ -275,6 +309,8 @@ void loop() {
       delay(50);
 
 
+      Serial.printf("Get float pHValue  -->  %s\n", Firebase.getFloat(fbdo, "/pHValue") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+      delay(50);
 
       Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
       // a1 = fbdo.to<float>();
