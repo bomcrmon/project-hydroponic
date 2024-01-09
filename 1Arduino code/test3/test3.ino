@@ -35,7 +35,7 @@ IPAddress primaryDNS(8, 8, 8, 8);
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
-#define waterHW 32
+#define waterHW 35
 #define waterXKC 33
 #define phport 32
 
@@ -60,8 +60,12 @@ DHT dht(DHTPIN, DHTTYPE);
 long phTot;
 float pHValue, phAvg, phVoltage;
 int x;
-float C = 25.85;  //Constant of straight line (Y = mx + C)
-float m = -6.80;  // Slope of straight line (Y = mx + C)
+// float C = 25.85;  //Constant of straight line (Y = mx + C)
+// float m = -6.80;  // Slope of straight line (Y = mx + C)
+float C = 0;       //Constant of straight line (Y = mx + C)
+float m = 4.2424;  // Slope of straight line (Y = mx + C)
+
+
 //----------------------------
 //------fertilizerSensor------
 int sensorValue;
@@ -148,15 +152,19 @@ void setup() {
 void PHsensor() {
   phTot = 0;
   phAvg = 0;
-  // taking 10 sample and adding with 10 milli second delay
-  for (x = 0; x < 10; x++) {
+  phVoltage = 0;
+  pHValue = 0;
+  // taking 100 sample and adding with 10 milli second delay
+  for (x = 0; x < 100; x++) {
     phTot += analogRead(phport);
-    delay(10);
+    delay(1);
   }
-  phAvg = phTot / 10;
+  phAvg = phTot / 100;
 
   phVoltage = phAvg * (3.3 / 4095.0);
+  phVoltage += 0.2;  // Add 0.1 to phVoltage
   pHValue = phVoltage * m + C;
+  pHValue += 1.15;
 
   Serial.print("phVoltage = ");
   Serial.print(phVoltage);
