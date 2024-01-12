@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ดึงค่า Humidity จาก Firebase</title>
+</head>
+
+<body>
+    <h1>ค่าความชื้น</h1>
+    <div id="Humidity"></div>
+
+    <h1>อุณหภูมิ</h1>
+    <div id="Temperature"></div>
+
+    <h1>pH Value</h1>
+    <div id="pHValue"></div>
+
+    <h1>Fertilizers State</h1>
+    <div id="fertilizersState"></div>
+
+    <h1>Water State</h1>
+    <div id="waterState"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-database.js"></script>
+    <script>
+        // ข้อมูล Firebase ของเว็บแอป
+        const firebaseConfig = {
+            apiKey: "AIzaSyDC4RoIxtD36gbhFYJeCGEPFXgqDbhk2Cw",
+            authDomain: "test-esp32-14072.firebaseapp.com",
+            databaseURL: "https://test-esp32-14072-default-rtdb.firebaseio.com",
+            projectId: "test-esp32-14072",
+            storageBucket: "test-esp32-14072.appspot.com",
+            messagingSenderId: "470419016740",
+            appId: "1:470419016740:web:2e7d599271552188459cb1",
+            measurementId: "G-33KDRHQKYM"
+        };
+
+        // เริ่ม Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // กำหนดเส้นทางไปยังข้อมูลที่ต้องการดึง
+        const HumidityRef = firebase.database().ref("Humidity");
+        const TemperatureRef = firebase.database().ref("Temperature");
+        const pHValueRef = firebase.database().ref("pHValue");
+        const fertilizersstateRef = firebase.database().ref("fertilizersstate");
+        const waterstateRef = firebase.database().ref("waterstate");
+
+        // ดึงข้อมูล Humidity
+        HumidityRef.on("value", (snapshot) => {
+            // แสดงข้อมูล
+            const humidityValue = snapshot.val();
+            document.getElementById("Humidity").innerHTML = `ความชื้น: ${humidityValue}`;
+        });
+
+        // ดึงข้อมูล Temperature
+        TemperatureRef.on("value", (snapshot) => {
+            // แสดงข้อมูล
+            const temperatureValue = snapshot.val();
+            document.getElementById("Temperature").innerHTML = `อุณหภูมิ: ${temperatureValue}`;
+        });
+
+        // ดึงข้อมูล pH Value
+        pHValueRef.on("value", (snapshot) => {
+            // แสดงข้อมูล
+            const pHValue = snapshot.val();
+            document.getElementById("pHValue").innerHTML = `pH Value: ${pHValue}`;
+        });
+
+        // ดึงข้อมูล Fertilizers State
+        fertilizersstateRef.on("value", (snapshot) => {
+            // แสดงข้อมูล
+            const fertilizersState = snapshot.val();
+            const fertilizersStateElement = document.getElementById("fertilizersState");
+            fertilizersStateElement.innerHTML = `Fertilizers State: ${fertilizersState ? 'On' : 'Off'}`;
+        });
+
+        // ดึงข้อมูล Water State
+        waterstateRef.on("value", (snapshot) => {
+            // แสดงข้อมูล
+            const waterState = snapshot.val();
+            const waterStateElement = document.getElementById("waterState");
+            waterStateElement.innerHTML = `Water State: ${waterState ? 'On' : 'Off'}`;
+        });
+    </script>
+</body>
+
+</html>

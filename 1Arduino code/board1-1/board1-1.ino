@@ -222,26 +222,26 @@ void loop() {
       Firebase.setBool(fbdo, "/waterstate", waterState);
       delay(10);
 
-      Serial.printf("Get float pHValue  -->  %s\n", Firebase.getFloat(fbdo, "/pHValue") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      delay(10);
+      // Serial.printf("Get float pHValue  -->  %s\n", Firebase.getFloat(fbdo, "/pHValue") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+      // delay(10);
 
-      Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      // a1 = fbdo.to<float>();
-      delay(10);
+      // Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+      // // a1 = fbdo.to<float>();
+      // delay(10);
 
-      Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      // b1 = fbdo.to<float>();
-      delay(10);
+      // Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
+      // // b1 = fbdo.to<float>();
+      // delay(10);
 
-      Serial.printf("Get bool fertilizersstate -->  %s\n", Firebase.getBool(fbdo, "/fertilizersstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      delay(10);
+      // Serial.printf("Get bool fertilizersstate -->  %s\n", Firebase.getBool(fbdo, "/fertilizersstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      // delay(10);
 
-      Serial.printf("Get bool waterstate -->  %s\n", Firebase.getBool(fbdo, "/waterstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      delay(10);
+      // Serial.printf("Get bool waterstate -->  %s\n", Firebase.getBool(fbdo, "/waterstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
+      // delay(10);
 
-      Serial.println();
-      Serial.println("**************************");
-      Serial.println();
+      // Serial.println();
+      // Serial.println("**************************");
+      // Serial.println();
 
       Serial.printf("Get bool sprinklerfertilizers -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinklerfertilizers") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
       sprinklerfertilizers = fbdo.to<bool>();
