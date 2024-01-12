@@ -221,7 +221,7 @@ void loop() {
       delay(10);
       Firebase.setBool(fbdo, "/waterstate", waterState);
       delay(10);
-
+      ///////////////////////////เอาข้อมูลมาโชว//////////////////////////////////////////////////
       // Serial.printf("Get float pHValue  -->  %s\n", Firebase.getFloat(fbdo, "/pHValue") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
       // delay(10);
 
