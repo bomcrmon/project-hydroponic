@@ -18,11 +18,11 @@ void PHsensor() {
   float pHValue = 0;
 
   // taking 100 samples and adding with 10 milliseconds delay
-  for (x = 0; x < 1000; x++) {
+  for (x = 0; x < 100; x++) {
     phTot += analogRead(phport);
     delay(1);
   }
-  float phAvg = phTot / 1000;
+  float phAvg = phTot / 100;
 
   phVoltage = phAvg * (3.3 / 4095.0);
   phVoltage -= 0.05;  // Add xxx to phVoltage
