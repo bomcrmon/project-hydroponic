@@ -23,6 +23,40 @@
     <h1>Water State</h1>
     <div id="waterState"></div>
 
+    <h1>Relay States</h1>
+    <div>
+        <label for="fanSwitch">Fan:</label>
+        <input type="checkbox" id="fanSwitch">
+    </div>
+    <div>
+        <label for="ledSwitch">LED:</label>
+        <input type="checkbox" id="ledSwitch">
+    </div>
+    <div>
+        <label for="pumpphDownSwitch">Pump pH Down:</label>
+        <input type="checkbox" id="pumpphDownSwitch">
+    </div>
+    <div>
+        <label for="pumpphUPSwitch">Pump pH UP:</label>
+        <input type="checkbox" id="pumpphUPSwitch">
+    </div>
+    <div>
+        <label for="pumpwaterSwitch">Pump Water:</label>
+        <input type="checkbox" id="pumpwaterSwitch">
+    </div>
+    <div>
+        <label for="sprinklerfertilizersSwitch">Sprinkler Fertilizers:</label>
+        <input type="checkbox" id="sprinklerfertilizersSwitch">
+    </div>
+    <div>
+        <label for="sprinklerwaterSwitch">Sprinkler Water:</label>
+        <input type="checkbox" id="sprinklerwaterSwitch">
+    </div>
+    <div>
+        <label for="valveSwitch">Valve:</label>
+        <input type="checkbox" id="valveSwitch">
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-database.js"></script>
     <script>
@@ -47,6 +81,49 @@
         const pHValueRef = firebase.database().ref("pHValue");
         const fertilizersstateRef = firebase.database().ref("fertilizersstate");
         const waterstateRef = firebase.database().ref("waterstate");
+
+        // กำหนดเส้นทางไปยังข้อมูล Relay States
+        const relaystate_fanRef = firebase.database().ref("relaystate/fan");
+        const relaystate_ledRef = firebase.database().ref("relaystate/led");
+        const relaystate_pumpphDownRef = firebase.database().ref("relaystate/pumpphDown");
+        const relaystate_pumpphUPRef = firebase.database().ref("relaystate/pumpphUP");
+        const relaystate_pumpwaterRef = firebase.database().ref("relaystate/pumpwater");
+        const relaystate_sprinklerfertilizersRef = firebase.database().ref("relaystate/sprinklerfertilizers");
+        const relaystate_sprinklerwaterRef = firebase.database().ref("relaystate/sprinklerwater");
+        const relaystate_valveRef = firebase.database().ref("relaystate/valve");
+
+        // ดึงข้อมูล Relay States
+        relaystate_fanRef.on("value", (snapshot) => {
+            updateSwitchState("fanSwitch", snapshot.val());
+        });
+
+        relaystate_ledRef.on("value", (snapshot) => {
+            updateSwitchState("ledSwitch", snapshot.val());
+        });
+
+        relaystate_pumpphDownRef.on("value", (snapshot) => {
+            updateSwitchState("pumpphDownSwitch", snapshot.val());
+        });
+
+        relaystate_pumpphUPRef.on("value", (snapshot) => {
+            updateSwitchState("pumpphUPSwitch", snapshot.val());
+        });
+
+        relaystate_pumpwaterRef.on("value", (snapshot) => {
+            updateSwitchState("pumpwaterSwitch", snapshot.val());
+        });
+
+        relaystate_sprinklerfertilizersRef.on("value", (snapshot) => {
+            updateSwitchState("sprinklerfertilizersSwitch", snapshot.val());
+        });
+
+        relaystate_sprinklerwaterRef.on("value", (snapshot) => {
+            updateSwitchState("sprinklerwaterSwitch", snapshot.val());
+        });
+
+        relaystate_valveRef.on("value", (snapshot) => {
+            updateSwitchState("valveSwitch", snapshot.val());
+        });
 
         // ดึงข้อมูล Humidity
         HumidityRef.on("value", (snapshot) => {
@@ -83,6 +160,44 @@
             const waterState = snapshot.val();
             const waterStateElement = document.getElementById("waterState");
             waterStateElement.innerHTML = `Water State: ${waterState ? 'On' : 'Off'}`;
+        });
+
+        // Function to update switch state
+        function updateSwitchState(switchId, state) {
+            document.getElementById(switchId).checked = state;
+        }
+
+        // Add event listeners to update Firebase when switches change
+        document.getElementById("fanSwitch").addEventListener("change", (event) => {
+            relaystate_fanRef.set(event.target.checked);
+        });
+
+        document.getElementById("ledSwitch").addEventListener("change", (event) => {
+            relaystate_ledRef.set(event.target.checked);
+        });
+
+        document.getElementById("pumpphDownSwitch").addEventListener("change", (event) => {
+            relaystate_pumpphDownRef.set(event.target.checked);
+        });
+
+        document.getElementById("pumpphUPSwitch").addEventListener("change", (event) => {
+            relaystate_pumpphUPRef.set(event.target.checked);
+        });
+
+        document.getElementById("pumpwaterSwitch").addEventListener("change", (event) => {
+            relaystate_pumpwaterRef.set(event.target.checked);
+        });
+
+        document.getElementById("sprinklerfertilizersSwitch").addEventListener("change", (event) => {
+            relaystate_sprinklerfertilizersRef.set(event.target.checked);
+        });
+
+        document.getElementById("sprinklerwaterSwitch").addEventListener("change", (event) => {
+            relaystate_sprinklerwaterRef.set(event.target.checked);
+        });
+
+        document.getElementById("valveSwitch").addEventListener("change", (event) => {
+            relaystate_valveRef.set(event.target.checked);
         });
     </script>
 </body>

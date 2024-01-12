@@ -123,16 +123,16 @@ void serialEvent() {
 void loop() {
   /////อ่านค่าเซนเซอร์///////////////
   fertilizerSensor();
-  delay(50);
+  delay(500);
 
   WaterLevel();
-  delay(50);
+  delay(500);
 
   ReadHumiTemp();
-  delay(50);
+  delay(500);
 
   PHsensor();
-  delay(50);
+  delay(500);
   //////////////////////////////////
 
   ///////////ส่งค่าเซนเซอร์/////////////
