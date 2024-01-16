@@ -52,9 +52,9 @@ void PHsensor() {
   phAvg = phTot / 100;
 
   phVoltage = phAvg * (3.3 / 4095.0);
-  phVoltage += 0;  // Add 0.1 to phVoltage
+  phVoltage += 0.12;  // Add 0.1 to phVoltage
   pHValue = phVoltage * m + C;
-  pHValue += 0.5;
+  pHValue += 0.2;
 
   Serial.print("phVoltage = ");
   Serial.print(phVoltage);

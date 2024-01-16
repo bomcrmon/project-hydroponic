@@ -11,20 +11,22 @@
 #define API_KAY "SfentqzDhmvn6CSXNISeLoalFMXXQTJJg46Y17fU"
 #define DATABASE_URL "https://test-esp32-14072-default-rtdb.firebaseio.com/"
 
+#define WIFI_SSID "Four-Faith Inno"
+#define WIFI_PASSWORD "Scada@2018"
 // #define WIFI_SSID "Innovation 2.4GHz"
 // #define WIFI_PASSWORD "Passw0rd@1"
 // #define WIFI_SSID "ibomcrmon"
 // #define WIFI_PASSWORD "12345678"
-#define WIFI_SSID "AsefaIoT"
-#define WIFI_PASSWORD "Asf026867766"
+// #define WIFI_SSID "AsefaIoT"
+// #define WIFI_PASSWORD "Asf026867766"
 
-/////////// Configures static IP address//////////////////////
-IPAddress local_IP(172, 16, 110, 129);
-// Set your Gateway IP address
-IPAddress gateway(172, 16, 110, 254);
-IPAddress subnet(255, 255, 255, 0);
-IPAddress primaryDNS(8, 8, 8, 8);
-/////////////////////////////////////////////////////////////
+// /////////// Configures static IP address//////////////////////
+// IPAddress local_IP(172, 16, 110, 70);
+// // Set your Gateway IP address
+// IPAddress gateway(172, 16, 110, 254);
+// IPAddress subnet(255, 255, 255, 0);
+// IPAddress primaryDNS(8, 8, 8, 8);
+// /////////////////////////////////////////////////////////////
 
 FirebaseData fbdo;
 FirebaseAuth auth;
@@ -55,6 +57,9 @@ bool pumpphUP, pumpphDown;
 
 void setup() {
 
+  Serial.begin(115200);
+  Serial2.begin(115200);
+
   pinMode(re1, OUTPUT);
   pinMode(re2, OUTPUT);
   pinMode(re3, OUTPUT);
@@ -84,11 +89,11 @@ void setup() {
   // digitalWrite(re12, 1);
   delay(100);
 
-  ////// Configures static IP address//////////////////////////////
-  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
-    Serial.println("STA Failed to configure");
-  }
-  /////////////////////////////////////////////////////////////////
+  // ////// Configures static IP address//////////////////////////////
+  // if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
+  //   Serial.println("STA Failed to configure");
+  // }
+  // /////////////////////////////////////////////////////////////////
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi ;p");
@@ -114,18 +119,20 @@ void setup() {
   Firebase.begin(DATABASE_URL, API_KAY);
   Firebase.setDoubleDigits(5);
 
-  Serial2.begin(115200);
   Serial.begin(115200);
-  analogReadResolution(12);
+  Serial2.begin(115200);
 }
 
 void NFRE(bool state, int relay) {
-  if (state == true) {
+  if (state == false) {
+    digitalWrite(relay, HIGH);
+    Serial.println("pin " + String(relay) + " off");
+  } else if (state == true) {
     digitalWrite(relay, LOW);
     Serial.println("pin " + String(relay) + " on");
   } else {
     digitalWrite(relay, HIGH);
-    Serial.println("pin " + String(relay) + " off");
+    Serial.println("network error");
   }
 }
 
@@ -158,6 +165,39 @@ int split(String data, char separator, String *output, int outputSize) {
   }
 
   return count;
+}
+
+bool isConnected() {
+  return WiFi.status() == WL_CONNECTED;
+}
+
+bool getBoolFromFirebase(FirebaseData &fbdo, const char *path, bool &variable) {
+  if (Firebase.getBool(fbdo, path)) {
+    Serial.printf("Get bool %s -->  %s\n", path, String(fbdo.to<bool>()).c_str());
+    variable = fbdo.to<bool>();
+  } else {
+    Serial.printf("Failed to get bool %s. Setting to false. Error: %s\n", path, fbdo.errorReason().c_str());
+    variable = false;
+  }
+  delay(1);
+  return variable;
+}
+void setFloatToFirebase(FirebaseData &fbdo, const char *path, float value) {
+  if (fbdo.httpConnected()) {
+    Firebase.setFloat(fbdo, path, value);
+    delay(1);
+  } else {
+    Serial.println("Not connected to Firebase. Skipping setFloat operation.");
+  }
+}
+// Function to set boolean value to Firebase and handle errors
+void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
+  if (fbdo.httpConnected()) {
+    Firebase.setBool(fbdo, path, value);
+    delay(1);
+  } else {
+    Serial.println("Not connected to Firebase. Skipping setBool operation.");
+  }
 }
 
 void loop() {
@@ -211,69 +251,21 @@ void loop() {
     ///////////////////////////////////
 
     if (Firebase.ready()) {
-      Firebase.setFloat(fbdo, "/pHValue", pHValue);
-      delay(10);
-      Firebase.setFloat(fbdo, "/Humidity", h);  //ตอนออกต้องเป็น %
-      delay(10);
-      Firebase.setFloat(fbdo, "/Temperature", t);
-      delay(10);
-      Firebase.setBool(fbdo, "/fertilizersstate", fertilizersState);
-      delay(10);
-      Firebase.setBool(fbdo, "/waterstate", waterState);
-      delay(10);
-      ///////////////////////////เอาข้อมูลมาโชว//////////////////////////////////////////////////
-      // Serial.printf("Get float pHValue  -->  %s\n", Firebase.getFloat(fbdo, "/pHValue") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      // delay(10);
-
-      // Serial.printf("Get float Humidity  -->  %s\n", Firebase.getFloat(fbdo, "/Humidity") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      // // a1 = fbdo.to<float>();
-      // delay(10);
-
-      // Serial.printf("Get float Temperature -->  %s\n", Firebase.getFloat(fbdo, "/Temperature") ? String(fbdo.to<float>()).c_str() : fbdo.errorReason().c_str());
-      // // b1 = fbdo.to<float>();
-      // delay(10);
-
-      // Serial.printf("Get bool fertilizersstate -->  %s\n", Firebase.getBool(fbdo, "/fertilizersstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      // delay(10);
-
-      // Serial.printf("Get bool waterstate -->  %s\n", Firebase.getBool(fbdo, "/waterstate") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      // delay(10);
-
-      // Serial.println();
-      // Serial.println("**************************");
-      // Serial.println();
-
-      Serial.printf("Get bool sprinklerfertilizers -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinklerfertilizers") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      sprinklerfertilizers = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool valve -->  %s\n", Firebase.getBool(fbdo, "/relaystate/valve") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      valve = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool led -->  %s\n", Firebase.getBool(fbdo, "/relaystate/led") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      led = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool pumpwater -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpwater") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      pumpwater = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool fan -->  %s\n", Firebase.getBool(fbdo, "/relaystate/fan") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      fan = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool sprinklerwater -->  %s\n", Firebase.getBool(fbdo, "/relaystate/sprinklerwater") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      sprinklerwater = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool pumpphUP -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpphUP") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      pumpphUP = fbdo.to<bool>();
-      delay(10);
-
-      Serial.printf("Get bool pumpphDown -->  %s\n", Firebase.getBool(fbdo, "/relaystate/pumpphDown") ? String(fbdo.to<bool>()).c_str() : fbdo.errorReason().c_str());
-      pumpphDown = fbdo.to<bool>();
-      delay(10);
+      ////////////////////////////////เขียนข้อมูลเซนเซอร์ลงfirebase////////////////
+      setFloatToFirebase(fbdo, "/pHValue", pHValue);
+      setFloatToFirebase(fbdo, "/Humidity", h);  // Percentage value
+      setFloatToFirebase(fbdo, "/Temperature", t);
+      setBoolToFirebase(fbdo, "/fertilizersstate", fertilizersState);
+      setBoolToFirebase(fbdo, "/waterstate", waterState);
+      /////////////////////////////////////////////////////////////////////////
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
+      getBoolFromFirebase(fbdo, "/relaystate/valve", valve);
+      getBoolFromFirebase(fbdo, "/relaystate/led", led);
+      getBoolFromFirebase(fbdo, "/relaystate/pumpwater", pumpwater);
+      getBoolFromFirebase(fbdo, "/relaystate/fan", fan);
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerwater", sprinklerwater);
+      getBoolFromFirebase(fbdo, "/relaystate/pumpphUP", pumpphUP);
+      getBoolFromFirebase(fbdo, "/relaystate/pumpphDown", pumpphDown);
 
       Serial.println();
       Serial.println("+++++++++++++++++++++++++++");
@@ -309,9 +301,9 @@ void loop() {
 
       Serial.println("----------------------------------------------------");
       Serial.println();
-      delay(10);
     }
-  } else if (Autosystem == false) {
+  } else {  //ถ้าเน็ตหลุดให้ทำการอะไร
+    isConnected();
     Serial.println("manual mode");
     delay(1000);
   }
