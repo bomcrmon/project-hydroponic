@@ -54,6 +54,7 @@ bool waterState;
 bool fan, led, sprinklerwater, valve, re1state, re2state, re3state, re4state;
 bool Autosystem, pumpwater, sprinklerfertilizers;
 bool pumpphUP, pumpphDown;
+bool FTlit50, FTlit100;
 
 void setup() {
   // กำหนดค่าขา GPIO 16 เป็นขา RX
@@ -213,25 +214,26 @@ void loop() {
     String data = Serial2.readStringUntil('\n');
 
     // แยกข้อมูล
-    String values[4];                             // ประกาศอาร์เรย์เพื่อเก็บค่าที่แยก
-    int numValues = split(data, '|', values, 4);  // ใช้ฟังก์ชันแยกเพื่อเติมอาร์เรย์
+    String values[7];                             // ประกาศอาร์เรย์เพื่อเก็บค่าที่แยก
+    int numValues = split(data, '|', values, 7);  // ใช้ฟังก์ชันแยกเพื่อเติมอาร์เรย์
 
     // ตรวจสอบค่าที่รับมา
-    if (numValues == 4) {  // ตรวจสอบว่าได้รับค่าทั้งหมดหรือไม่
-      // fertilizersState = values[0].equals("1");
-      waterState = values[0].equals("1");
-      h = values[1].toFloat();
-      t = values[2].toFloat();
-      pHValue = values[3].toFloat();
+    if (numValues == 7) {  // ตรวจสอบว่าได้รับค่าทั้งหมดหรือไม่
+      fertilizersState = values[0].equals("1");
+      waterState = values[1].equals("1");
+      FTlit50 = values[2].equals("1");
+      FTlit100 = values[3].equals("1");
+      h = values[4].toFloat();
+      t = values[5].toFloat();
+      pHValue = values[6].toFloat();
 
       // แสดงข้อมูล
-      // Serial.println("");
-      // Serial.print("Fertilizers State: ");
-      // if (fertilizersState) {
-      //   Serial.println("true");
-      // } else {
-      //   Serial.println("false");
-      // }
+      Serial.print("Fertilizers State: ");
+      if (fertilizersState) {
+        Serial.println("true");
+      } else {
+        Serial.println("false");
+      }
       Serial.print("Water State: ");
       if (waterState) {
         Serial.println("true");
@@ -244,6 +246,18 @@ void loop() {
       Serial.println(t);
       Serial.print("pH Value: ");
       Serial.println(pHValue);
+      Serial.print("FTlit50: ");
+      if (FTlit50) {
+        Serial.println("true");
+      } else {
+        Serial.println("false");
+      }
+      Serial.print("FTlit100: ");
+      if (FTlit100) {
+        Serial.println("true");
+      } else {
+        Serial.println("false");
+      }
       Serial.println("");
       Serial.println("----------------------------------");
 
@@ -257,8 +271,10 @@ void loop() {
       setFloatToFirebase(fbdo, "/pHValue", pHValue);
       setFloatToFirebase(fbdo, "/Humidity", h);  // Percentage value
       setFloatToFirebase(fbdo, "/Temperature", t);
-      // setBoolToFirebase(fbdo, "/fertilizersstate", fertilizersState);
+      setBoolToFirebase(fbdo, "/fertilizersstate", fertilizersState);
       setBoolToFirebase(fbdo, "/waterstate", waterState);
+      setBoolToFirebase(fbdo, "/fertilizersquantity/L500", FTlit50);
+      setBoolToFirebase(fbdo, "/fertilizersquantity/L1000", FTlit100);
       /////////////////////////////////////////////////////////////////////////
       getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
       getBoolFromFirebase(fbdo, "/relaystate/valve", valve);

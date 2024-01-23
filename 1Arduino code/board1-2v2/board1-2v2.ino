@@ -1,12 +1,22 @@
 #include "DHT.h"
 
+// #define phport 4
 // #define waterHW 35
 #define waterXKC 33
-#define phport 4
+#define phport 35
 
 #define DHTPIN 25
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
+
+#define FTL50 4
+#define FTL100 2
+
+#define MBL50 18
+#define MBL100 5
+
+bool FTlit50, FTlit100;
+bool MBlit50, MBlit100;
 
 //--------phsensor------------
 long phTot;
@@ -29,6 +39,12 @@ void setup() {
   pinMode(phport, INPUT);
   // pinMode(waterHW, INPUT);
   pinMode(waterXKC, INPUT_PULLDOWN);
+
+  pinMode(FTL50, INPUT_PULLUP);
+  pinMode(FTL100, INPUT_PULLUP);
+
+  pinMode(MBL50, INPUT_PULLUP);
+  pinMode(MBL100, INPUT_PULLUP);
 
   delay(1000);
 
@@ -61,7 +77,6 @@ void PHsensor() {
   Serial.print(" ");
   Serial.print("pH=");
   Serial.println(pHValue);
-
 }
 
 void ReadHumiTemp() {
@@ -87,12 +102,29 @@ void ReadHumiTemp() {
   // Serial.print(t);
   // Serial.println(F(" C "));
 }
+void ReadLevelFT() {
+    FTlit50 = digitalRead(FTL50);
+    FTlit100 = digitalRead(FTL100);
+}
+
+void ReadLevelMB() {
+  if (digitalRead(MBL50) > 0) {
+    MBlit50 = true;
+  } else {
+    FTlit50 = false;
+  }
+
+  if (digitalRead(MBL100) > 0) {
+    MBlit100 = true;
+  } else {
+    MBlit100 = false;
+  }
+}
 
 void WaterLevel() {
-  //ควบุมระดับน้ำ เปิดน้ำเมื่อลดต่ำกว่ากำหนด
+  //ควบุมระดับน้ำ
   if (digitalRead(waterXKC) > 0) {
     waterstate = true;
-
   } else if (digitalRead(waterXKC) == 0) {
     waterstate = false;
   }
@@ -123,31 +155,46 @@ void serialEvent() {
 void loop() {
   /////อ่านค่าเซนเซอร์///////////////
   // fertilizerSensor();
-  // delay(500);
+  // delay(200);
 
   WaterLevel();
-  delay(500);
+  delay(200);
 
   ReadHumiTemp();
-  delay(500);
+  delay(200);
 
   PHsensor();
-  delay(500);
+  delay(200);
+
+  ReadLevelFT();
+  delay(100);
+
+  ReadLevelMB();
+  delay(100);
   //////////////////////////////////
 
   ///////////ส่งค่าเซนเซอร์/////////////
   serialEvent();  ////เซ็คว่าฝั่งนู้นต้องการรับข้อมูลหรือไม่
   if (sendFlag) {
     String data = "";
-    // data += fertilizersstate ? "1" : "0";
-    // data += "|";
+    data += fertilizersstate ? "1" : "0";
+    data += "|";
     data += waterstate ? "1" : "0";
+    data += "|";
+    data += FTlit50 ? "1" : "0";
+    data += "|";
+    data += FTlit100 ? "1" : "0";
     data += "|";
     data += h;
     data += "|";
     data += t;
     data += "|";
     data += pHValue;
+    data += "|";
+    data += MBlit50 ? "1" : "0";
+    data += "|";
+    data += MBlit100 ? "1" : "0";
+
 
     Serial.println(data);
     Serial2.println(data);
