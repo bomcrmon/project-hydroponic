@@ -116,8 +116,6 @@ import { MatTableModule } from '@angular/material/table';
     MatRippleModule,
     MatBottomSheetModule,
     MatDialogModule,
-    MatDialogRef,
-    MatDialogActions,
     MatSnackBarModule,
     MatTooltipModule,
     MatPaginatorModule,
