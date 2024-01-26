@@ -73,8 +73,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+
+
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from 'src/environments/environment';
+
+import { HomeComponent } from './function/home/home.component';
+import { LoginComponent } from './function/login/login.component';
+import { RegisterComponent } from './function/register/register.component';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HomeComponent, LoginComponent, RegisterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -121,7 +130,12 @@ import { MatTableModule } from '@angular/material/table';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatRadioModule
+    MatRadioModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
+    
+    
+    
   ],
   providers: [],
   bootstrap: [AppComponent],
