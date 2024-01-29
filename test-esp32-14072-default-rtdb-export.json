@@ -1,0 +1,28 @@
+{
+  "Autosystem": true,
+  "Humidity": 50.9,
+  "Temperature": 28,
+  "pHValue": 8.14,
+  "quantityFT": 0,
+  "quantityMB": 0,
+  "quantityphdown": 0,
+  "quantityphup": 0,
+  "quantitysprinklerfertilizers": 0,
+  "quantitysprinklerwater": 0,
+  "relaystate": {
+    "fan": false,
+    "fertilizers": false,
+    "led": false,
+    "microbial": false,
+    "pumpStirring": false,
+    "pumpUP": false,
+    "pumpphDown": false,
+    "pumpphUP": false,
+    "pumpwater": false,
+    "sprinklerfertilizers": false,
+    "sprinklerwater": false,
+    "valve": false
+  },
+  "waterstatehigh": false,
+  "waterstatelow": false
+}

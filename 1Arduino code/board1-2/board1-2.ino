@@ -1,7 +1,8 @@
 #include "DHT.h"
 
 // #define waterHW 35
-#define waterXKC 33
+#define waterXKClow 32
+#define waterXKChigh 33
 #define phport 4
 
 #define DHTPIN 25
@@ -21,15 +22,15 @@ int sensorValue;
 float h, t;
 String Humi, Temp;
 //----------------------------
-bool waterstate, fertilizersstate;
-
+bool waterstatehigh, waterstatelow;
+bool waterstate;
 bool sendFlag = false;  // Control signal to indicate when to send data
 
 void setup() {
   pinMode(phport, INPUT);
   // pinMode(waterHW, INPUT);
-  pinMode(waterXKC, INPUT_PULLDOWN);
-
+  pinMode(waterXKChigh, INPUT_PULLDOWN);
+  pinMode(waterXKClow, INPUT_PULLDOWN);
   delay(1000);
 
   dht.begin();
@@ -61,7 +62,6 @@ void PHsensor() {
   Serial.print(" ");
   Serial.print("pH=");
   Serial.println(pHValue);
-
 }
 
 void ReadHumiTemp() {
@@ -88,13 +88,23 @@ void ReadHumiTemp() {
   // Serial.println(F(" C "));
 }
 
-void WaterLevel() {
+void WaterLevelH() {
   //ควบุมระดับน้ำ เปิดน้ำเมื่อลดต่ำกว่ากำหนด
-  if (digitalRead(waterXKC) > 0) {
-    waterstate = true;
+  if (digitalRead(waterXKChigh) > 0) {
+    waterstatehigh = true;
 
-  } else if (digitalRead(waterXKC) == 0) {
-    waterstate = false;
+  } else if (digitalRead(waterXKChigh) == 0) {
+    waterstatehigh = false;
+  }
+}
+
+void WaterLevelL() {
+  //ควบุมระดับน้ำ เปิดน้ำเมื่อลดต่ำกว่ากำหนด
+  if (digitalRead(waterXKClow) > 0) {
+    waterstatelow = true;
+
+  } else if (digitalRead(waterXKClow) == 0) {
+    waterstatelow = false;
   }
 }
 
@@ -125,7 +135,10 @@ void loop() {
   // fertilizerSensor();
   // delay(500);
 
-  WaterLevel();
+  WaterLevelH();
+  delay(500);
+
+  WaterLevelL();
   delay(500);
 
   ReadHumiTemp();
@@ -141,7 +154,9 @@ void loop() {
     String data = "";
     // data += fertilizersstate ? "1" : "0";
     // data += "|";
-    data += waterstate ? "1" : "0";
+    data += waterstatehigh ? "1" : "0";
+    data += "|";
+    data += waterstatelow ? "1" : "0";
     data += "|";
     data += h;
     data += "|";

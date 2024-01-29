@@ -25,24 +25,28 @@
 
     <h1>Relay States</h1>
     <div>
-        <label for="fanSwitch">Fan:</label>
-        <input type="checkbox" id="fanSwitch">
-    </div>
-    <div>
-        <label for="ledSwitch">LED:</label>
-        <input type="checkbox" id="ledSwitch">
+        <label for="pumpphUPSwitch">Pump pH UP:</label>
+        <input type="checkbox" id="pumpphUPSwitch">
     </div>
     <div>
         <label for="pumpphDownSwitch">Pump pH Down:</label>
         <input type="checkbox" id="pumpphDownSwitch">
     </div>
     <div>
-        <label for="pumpphUPSwitch">Pump pH UP:</label>
-        <input type="checkbox" id="pumpphUPSwitch">
+        <label for="ledSwitch">LED:</label>
+        <input type="checkbox" id="ledSwitch">
+    </div>
+    <div>
+        <label for="fanSwitch">Fan:</label>
+        <input type="checkbox" id="fanSwitch">
     </div>
     <div>
         <label for="pumpwaterSwitch">Pump Water:</label>
         <input type="checkbox" id="pumpwaterSwitch">
+    </div>
+    <div>
+        <label for="valveSwitch">Valve:</label>
+        <input type="checkbox" id="valveSwitch">
     </div>
     <div>
         <label for="sprinklerfertilizersSwitch">Sprinkler Fertilizers:</label>
@@ -52,10 +56,7 @@
         <label for="sprinklerwaterSwitch">Sprinkler Water:</label>
         <input type="checkbox" id="sprinklerwaterSwitch">
     </div>
-    <div>
-        <label for="valveSwitch">Valve:</label>
-        <input type="checkbox" id="valveSwitch">
-    </div>
+
 
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-database.js"></script>
@@ -168,26 +169,30 @@
         }
 
         // Add event listeners to update Firebase when switches change
-        document.getElementById("fanSwitch").addEventListener("change", (event) => {
-            relaystate_fanRef.set(event.target.checked);
+        document.getElementById("pumpphUPSwitch").addEventListener("change", (event) => {
+            relaystate_pumpphUPRef.set(event.target.checked);
+        });
+        
+        document.getElementById("pumpphDownSwitch").addEventListener("change", (event) => {
+            relaystate_pumpphDownRef.set(event.target.checked);
         });
 
         document.getElementById("ledSwitch").addEventListener("change", (event) => {
             relaystate_ledRef.set(event.target.checked);
         });
 
-        document.getElementById("pumpphDownSwitch").addEventListener("change", (event) => {
-            relaystate_pumpphDownRef.set(event.target.checked);
-        });
-
-        document.getElementById("pumpphUPSwitch").addEventListener("change", (event) => {
-            relaystate_pumpphUPRef.set(event.target.checked);
+        document.getElementById("fanSwitch").addEventListener("change", (event) => {
+            relaystate_fanRef.set(event.target.checked);
         });
 
         document.getElementById("pumpwaterSwitch").addEventListener("change", (event) => {
             relaystate_pumpwaterRef.set(event.target.checked);
         });
 
+        document.getElementById("valveSwitch").addEventListener("change", (event) => {
+            relaystate_valveRef.set(event.target.checked);
+        });
+        
         document.getElementById("sprinklerfertilizersSwitch").addEventListener("change", (event) => {
             relaystate_sprinklerfertilizersRef.set(event.target.checked);
         });
@@ -196,9 +201,6 @@
             relaystate_sprinklerwaterRef.set(event.target.checked);
         });
 
-        document.getElementById("valveSwitch").addEventListener("change", (event) => {
-            relaystate_valveRef.set(event.target.checked);
-        });
     </script>
 </body>
 

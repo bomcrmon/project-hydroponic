@@ -1,0 +1,61 @@
+/* Hide the default checkbox */
+input[type="checkbox"] {
+    display: none;
+  }
+  
+  /* Style the toggle switch */
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: background-color 0.4s;
+  }
+  
+  /* Style the toggle switch knob */
+  .toggle-switch-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 28px;
+    height: 28px;
+    background-color: #fff;
+    border-radius: 26px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s;
+  }
+  
+  /* Style the toggle switch knob shadow */
+  .toggle-switch-knob-shadow {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s;
+  }
+  
+  /* Style the toggle switch knob checked state */
+  input[type="checkbox"]:checked + .toggle-switch .toggle-switch-knob {
+    transform: translateX(30px);
+  }
+  
+  input[type="checkbox"]:checked + .toggle-switch .toggle-switch-knob-shadow {
+    transform: translateX(30px);
+  }
+  
+  /* Style the toggle switch knob checked state shadow */
+  input[type="checkbox"]:checked + .toggle-switch .toggle-switch-knob:before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 20px;
+    height: 20px;
+    background-color: #2196F3;
+    border-radius: 18px;
+  }
