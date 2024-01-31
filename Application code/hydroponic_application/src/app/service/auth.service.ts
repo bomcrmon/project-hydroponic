@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   constructor(private fireauth : AngularFireAuth, private router :Router,private db: AngularFireDatabase) { }
-
+  relaystate_fanRef = this.db.list('relaystate/fan');
+  relaystate_ledRef = this.db.list('relaystate/led');
 
   //login
   login(email :string, password: string){
@@ -44,6 +45,8 @@ logout(){
           })
   }
 
+
+  //get data มาดู
   humidityValue() {
     return this.db.object('Humidity').valueChanges();
   }
@@ -70,27 +73,27 @@ logout(){
   // }
 
 
-  fan () {
-    return this.db.object('pHValue').valueChanges();
-  }
-  led () {
-    return this.db.object('pHValue').valueChanges();
-  }
-  pump_ph_down () {
-    return this.db.object('pump_ph_down').valueChanges();
-  }
-  pump_ph_up () {
-    return this.db.object('pump_ph_up').valueChanges();
-  }
-  pump_water_up () {
-    return this.db.object('pump_water_up').valueChanges();
-  }
-  sprinklerfertilizers () {
-    return this.db.object('sprinklerfertilizers').valueChanges();
-  }
-  sprinklerwater () {
-    return this.db.object('sprinklerwater').valueChanges();
-  }
+  // fan () {
+  //   return this.db.object('pHValue').valueChanges();
+  // }
+  // led () {
+  //   return this.db.object('pHValue').valueChanges();
+  // }
+  // pump_ph_down () {
+  //   return this.db.object('pump_ph_down').valueChanges();
+  // }
+  // pump_ph_up () {
+  //   return this.db.object('pump_ph_up').valueChanges();
+  // }
+  // pump_water_up () {
+  //   return this.db.object('pump_water_up').valueChanges();
+  // }
+  // sprinklerfertilizers () {
+  //   return this.db.object('sprinklerfertilizers').valueChanges();
+  // }
+  // sprinklerwater () {
+  //   return this.db.object('sprinklerwater').valueChanges();
+  // }
 
 
 }
