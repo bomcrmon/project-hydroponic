@@ -9,7 +9,17 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private fireauth : AngularFireAuth, private router :Router,private db: AngularFireDatabase) { }
   relaystate_fanRef = this.db.list('relaystate/fan');
+  relaystate_fertilizers = this.db.list('relaystate/fertilizers');
   relaystate_ledRef = this.db.list('relaystate/led');
+  relaystate_microbialRef = this.db.list('relaystate/microbial');
+  relaystate_pumpStirring = this.db.list('relaystate/pumpStirring');
+  relaystate_pumpUP = this.db.list('relaystate/pumpUP');
+  relaystate_pumpphDown = this.db.list('relaystate/pumpphDown');
+  relaystate_pumpphUP = this.db.list('relaystate/pumpphUP');
+  relaystate_pumpwater = this.db.list('relaystate/pumpwater');
+  relaystate_sprinklerfertilizers = this.db.list('relaystate/sprinklerfertilizers');
+  relaystate_sprinklerwater = this.db.list('relaystate/sprinklerwater');
+  relaystate_valve = this.db.list('relaystate/valve');
 
   //login
   login(email :string, password: string){
@@ -62,39 +72,6 @@ logout(){
   waterState () {
     return this.db.object('waterState').valueChanges();
   }
-
-
-  // getSwitchValue(switchKey: string) {
-  //   return this.db.object(`relaystate/${switchKey}`).valueChanges();
-  // }
-
-  // setSwitchValue(switchKey: string, value: boolean) {
-  //   this.db.object(`relaystate/${switchKey}`).set(value);
-  // }
-
-
-  // fan () {
-  //   return this.db.object('pHValue').valueChanges();
-  // }
-  // led () {
-  //   return this.db.object('pHValue').valueChanges();
-  // }
-  // pump_ph_down () {
-  //   return this.db.object('pump_ph_down').valueChanges();
-  // }
-  // pump_ph_up () {
-  //   return this.db.object('pump_ph_up').valueChanges();
-  // }
-  // pump_water_up () {
-  //   return this.db.object('pump_water_up').valueChanges();
-  // }
-  // sprinklerfertilizers () {
-  //   return this.db.object('sprinklerfertilizers').valueChanges();
-  // }
-  // sprinklerwater () {
-  //   return this.db.object('sprinklerwater').valueChanges();
-  // }
-
 
 }
 

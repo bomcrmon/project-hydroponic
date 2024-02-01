@@ -66,13 +66,44 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  fanSwitchChanged(event: any) {
+  fanSwitch(event: any) {
     this.db.object('relaystate/fan').set(event.target.checked);
   }
 
-  ledSwitchChanged(event: any) {
+  ledSwitch(event: any) {
     this.db.object('relaystate/led').set(event.target.checked);
   }
+  fertilizers(event: any) {
+    this.db.object('relaystate/fertilizers').set(event.target.checked);
+  }
+  microbial(event: any) {
+    this.db.object('relaystate/microbial').set(event.target.checked);
+  }
+  pumpStirring(event: any) {
+    this.db.object('relaystate/pumpStirring').set(event.target.checked);
+  }
+  pumpUP(event: any) {
+    this.db.object('relaystate/pumpUP').set(event.target.checked);
+  }
+  pumpphDown(event: any) {
+    this.db.object('relaystate/pumpphDown').set(event.target.checked);
+  }
+  pumpphUP(event: any) {
+    this.db.object('relaystate/pumpphUP').set(event.target.checked);
+  }
+  pumpwater(event: any) {
+    this.db.object('relaystate/pumpwater').set(event.target.checked);
+  }
+  sprinkler_fertilizers(event: any) {
+    this.db.object('relaystate/sprinklerfertilizers').set(event.target.checked);
+  }
+  sprinkler_water(event: any) {
+    this.db.object('relaystate/sprinklerwater').set(event.target.checked);
+  }
+  valve(event: any) {
+    this.db.object('relaystate/valve').set(event.target.checked);
+  }
+
 
 
 }
