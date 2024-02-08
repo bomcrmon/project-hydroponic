@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ดึงค่า Humidity จาก Firebase</title>
+    <title>ดึงค่า จาก Firebase</title>
 </head>
 
 <body>
@@ -17,11 +17,11 @@
     <h1>pH Value</h1>
     <div id="pHValue"></div>
 
-    <h1>Fertilizers State</h1>
-    <div id="fertilizersState"></div>
+    <h1>Water State Low</h1>
+    <div id="waterStatelow"></div>
 
-    <h1>Water State</h1>
-    <div id="waterState"></div>
+    <h1>Water State High</h1>
+    <div id="waterStatehigh"></div>
 
     <h1>Relay States</h1>
     <div>
@@ -80,8 +80,8 @@
         const HumidityRef = firebase.database().ref("Humidity");
         const TemperatureRef = firebase.database().ref("Temperature");
         const pHValueRef = firebase.database().ref("pHValue");
-        const fertilizersstateRef = firebase.database().ref("fertilizersstate");
-        const waterstateRef = firebase.database().ref("waterstate");
+        const waterstatelowRef = firebase.database().ref("waterstatelow");
+        const waterstatehighRef = firebase.database().ref("waterstatehigh");
 
         // กำหนดเส้นทางไปยังข้อมูล Relay States
         const relaystate_fanRef = firebase.database().ref("relaystate/fan");
@@ -148,19 +148,19 @@
         });
 
         // ดึงข้อมูล Fertilizers State
-        fertilizersstateRef.on("value", (snapshot) => {
+        waterstatelowRef.on("value", (snapshot) => {
             // แสดงข้อมูล
-            const fertilizersState = snapshot.val();
-            const fertilizersStateElement = document.getElementById("fertilizersState");
-            fertilizersStateElement.innerHTML = `Fertilizers State: ${fertilizersState ? 'On' : 'Off'}`;
+            const waterStatelow = snapshot.val();
+            const waterStatelowElement = document.getElementById("waterStatelow");
+            waterStatelowElement.innerHTML = `Water State Low: ${waterStatelow ? 'On' : 'Off'}`;
         });
 
         // ดึงข้อมูล Water State
-        waterstateRef.on("value", (snapshot) => {
+        waterstatehighRef.on("value", (snapshot) => {
             // แสดงข้อมูล
-            const waterState = snapshot.val();
-            const waterStateElement = document.getElementById("waterState");
-            waterStateElement.innerHTML = `Water State: ${waterState ? 'On' : 'Off'}`;
+            const waterStatehigh = snapshot.val();
+            const waterStatehighElement = document.getElementById("waterStatehigh");
+            waterStatehighElement.innerHTML = `Water State High: ${waterStatehigh ? 'On' : 'Off'}`;
         });
 
         // Function to update switch state

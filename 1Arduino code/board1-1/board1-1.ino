@@ -27,8 +27,8 @@ FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 
-#define re1 14  // pump ph up
-#define re2 12  // pump ph down
+#define re1 23  // pumpup
+#define re2 15  // pump stirring
 #define re3 25  // led
 #define re4 26  // fan
 #define re5 27  // pump water
@@ -38,8 +38,8 @@ FirebaseConfig config;
 
 #define re9 21   // q FT
 #define re10 22  // q MB
-#define re11 23  // pumpup
-#define re12 15  // pump stirring
+#define re11 14  // pump ph up
+#define re12 12  // pump ph down
 
 //////////////////////////////////////////////////////////////
 int quantitysprinklerfertilizers, quantitysprinklerwater;
@@ -76,6 +76,7 @@ bool Autosystem, pumpwater, sprinklerfertilizers;
 bool pumpphUP, pumpphDown, led, sprinklerwater, valve;
 
 void setup() {
+  Serial.begin(115200);
   // กำหนดค่าขา GPIO 16 เป็นขา RX
   pinMode(16, INPUT);
   // กำหนดค่าขา GPIO 17 เป็นขา TX
@@ -334,6 +335,7 @@ bool getBoolFromFirebase(FirebaseData &fbdo, const char *path, bool &variable) {
 void setFloatToFirebase(FirebaseData &fbdo, const char *path, float value) {
   if (fbdo.httpConnected()) {
     Firebase.setFloat(fbdo, path, value);
+    Serial.println("set");
     delay(1);
   } else {
     Serial.println("Not connected to Firebase. Skipping setFloat operation.");
@@ -342,6 +344,7 @@ void setFloatToFirebase(FirebaseData &fbdo, const char *path, float value) {
 void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
   if (fbdo.httpConnected()) {
     Firebase.setBool(fbdo, path, value);
+    Serial.println("set");
     delay(1);
   } else {
     Serial.println("Not connected to Firebase. Skipping setBool operation.");
@@ -490,33 +493,37 @@ void loop() {
           re2Finished = false;
         }
       }
-      getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
       getBoolFromFirebase(fbdo, "/relaystate/valve", valve);
+      NFRE(valve, re6);
       getBoolFromFirebase(fbdo, "/relaystate/led", led);
+      NFRE(led, re3);
       getBoolFromFirebase(fbdo, "/relaystate/pumpwater", pumpwater);
+      NFRE(pumpwater, re5);
       getBoolFromFirebase(fbdo, "/relaystate/fan", fan);
-      getBoolFromFirebase(fbdo, "/relaystate/sprinklerwater", sprinklerwater);
+      NFRE(fan, re4);
       getBoolFromFirebase(fbdo, "/relaystate/pumpphUP", pumpphUP);
       getBoolFromFirebase(fbdo, "/relaystate/pumpphDown", pumpphDown);
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerwater", sprinklerwater);
       getBoolFromFirebase(fbdo, "/relaystate/fertilizers", fertilizers);
       getBoolFromFirebase(fbdo, "/relaystate/microbial", microbial);
       getBoolFromFirebase(fbdo, "/relaystate/pumpStirring", pumpStirring);
       getBoolFromFirebase(fbdo, "/relaystate/pumpUP", pumpUP);
       Serial.println("+++++++++++++++++++++++++++");
 
-      NFRE(led, re3);
-      delay(10);
+      // NFRE(led, re3);
+      // delay(10);
 
-      NFRE(fan, re4);
-      delay(10);
+      // NFRE(fan, re4);
+      // delay(10);
 
-      NFRE(pumpwater, re5);
-      delay(10);
+      // NFRE(pumpwater, re5);
+      // delay(10);
 
-      NFRE(valve, re6);
-      delay(10);
+      // NFRE(valve, re6);
+      // delay(10);
 
-      Serial.println("-------------------------------");
+      // Serial.println("-------------------------------");
 
       if (!reActive1) {
         NFRE(pumpphUP, re1);
