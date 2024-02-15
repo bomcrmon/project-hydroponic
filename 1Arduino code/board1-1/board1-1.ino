@@ -2,12 +2,14 @@
 #include <FirebaseESP32.h>
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
+#include <WiFiManager.h>
 
 #define API_KEY "SfentqzDhmvn6CSXNISeLoalFMXXQTJJg46Y17fU"
 #define DATABASE_URL "https://test-esp32-14072-default-rtdb.firebaseio.com/"
 
-#define WIFI_SSID "Four-Faith Inno"
-#define WIFI_PASSWORD "Scada@2018"
+
+// #define WIFI_SSID "Four-Faith Inno"
+// #define WIFI_PASSWORD "Scada@2018"
 // #define WIFI_SSID "Innovation 2.4GHz"
 // #define WIFI_PASSWORD "Passw0rd@1"
 // #define WIFI_SSID "ibomcrmon"
@@ -23,9 +25,13 @@
 // IPAddress primaryDNS(8, 8, 8, 8);
 // /////////////////////////////////////////////////////////////
 
+WiFiManager wm;
+
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
+
+#define SWrwf 32
 
 #define re1 23  // pumpup
 #define re2 15  // pump stirring
@@ -77,6 +83,7 @@ bool pumpphUP, pumpphDown, led, sprinklerwater, valve;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(SWrwf, INPUT_PULLUP);
   // กำหนดค่าขา GPIO 16 เป็นขา RX
   pinMode(16, INPUT);
   // กำหนดค่าขา GPIO 17 เป็นขา TX
@@ -109,23 +116,33 @@ void setup() {
   digitalWrite(re12, 1);
   delay(10);
 
+  if (wm.autoConnect("@hydroponic farm")) {
+    Serial.println("");
+    Serial.println("Connected already WiFi : ");
+    Serial.println("OP Address : ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("failed to connect");
+    delay(1000);
+    ESP.restart();
+  }
   // ////// Configures static IP address//////////////////////////////
   // if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
   //   Serial.println("STA Failed to configure");
   // }
   // /////////////////////////////////////////////////////////////////
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi ;p");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(100);
-  }
-  //print localIP
-  Serial.println();
-  Serial.print("Connected with IP: ");
-  Serial.println(WiFi.localIP());
+  // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  // Serial.print("Connecting to Wi-Fi ;p");
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   Serial.print(".");
+  //   delay(100);
+  // }
+  // //print localIP
   // Serial.println();
+  // Serial.print("Connected with IP: ");
+  // Serial.println(WiFi.localIP());
+  // // Serial.println();
 
   // Print ESP MAC Address
   Serial.print("MAC address: ");
@@ -139,17 +156,19 @@ void setup() {
   Firebase.begin(DATABASE_URL, API_KEY);
   Firebase.setDoubleDigits(5);
 
-  Serial.begin(115200);
   Serial2.begin(115200);
 }
-bool isConnected() {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi ;p");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(300);
+void Wifi_Reset() {
+  if (digitalRead(SWrwf) == LOW) {
+    Serial.println("Wifi Reset? watting 2S..");
+    delay(2000);
+    if (digitalRead(SWrwf) == LOW) {
+      delay(10);
+      Serial.println("wifi Reset Setting ..OK");
+      wm.resetSettings();
+      ESP.restart();
+    }
   }
-  return WiFi.status() == WL_CONNECTED;
 }
 void re1quantity(void *arg) {
   Serial.println("****re1*****");
@@ -332,6 +351,17 @@ bool getBoolFromFirebase(FirebaseData &fbdo, const char *path, bool &variable) {
   delay(1);
   return variable;
 }
+bool getFloatFromFirebase(FirebaseData &fbdo, const char *path, float &variable) {
+  if (Firebase.getFloat(fbdo, path)) {
+    Serial.printf("Get float %s -->  %.2f\n", path, fbdo.to<float>());
+    variable = fbdo.to<float>();
+  } else {
+    Serial.printf("Failed to get float %s. Setting to 0.0. Error: %s\n", path, fbdo.errorReason().c_str());
+    variable = 0.0;
+  }
+  delay(1);
+  return variable;
+}
 void setFloatToFirebase(FirebaseData &fbdo, const char *path, float value) {
   if (fbdo.httpConnected()) {
     Firebase.setFloat(fbdo, path, value);
@@ -352,6 +382,17 @@ void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
 }
 
 void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi connection lost. Reconnecting...");
+    if (wm.autoConnect("@hydroponic farm")) {
+      Serial.println("Reconnected to WiFi.");
+      Serial.println("OP Address : ");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.println("Failed to reconnect to WiFi.");
+    }
+  }
+  Wifi_Reset();
   ///////รับค่าจากเซนเซอร์///////////////
   serialEvent();
   // รับข้อมูล
@@ -392,9 +433,7 @@ void loop() {
     Serial.println(pHValue);
     Serial.println("");
     Serial.println("----------------------------------");
-
-    // ลบข้อมูลที่อ่านมาทั้งหมด กันข้อมูลแถวยาวววว
-    Serial2.flush();
+    Serial2.flush();  // ลบข้อมูลที่อ่านมาทั้งหมด กันข้อมูลแถวยาวววว
   }
   ///////////////////////////////////
   if (Firebase.ready()) {
@@ -402,6 +441,14 @@ void loop() {
     Autosystem = fbdo.to<bool>();
 
     if (Autosystem == true) {
+      //เอาไว้กันไม่ให้ set ค่าตอนเครืองรี == 0
+      if (t == 0 && h == 0 && pHValue == 0) {
+        getBoolFromFirebase(fbdo, "/waterstatehigh", waterstatehigh);
+        getBoolFromFirebase(fbdo, "/waterstatelow", waterstatelow);
+        getFloatFromFirebase(fbdo, "/Temperature", t);
+        getFloatFromFirebase(fbdo, "/Humidity", h);
+        getFloatFromFirebase(fbdo, "/pHValue", pHValue);
+      }
       ////////////////////////////////เขียนข้อมูลเซนเซอร์ลงfirebase////////////////
       setFloatToFirebase(fbdo, "/pHValue", pHValue);
       setFloatToFirebase(fbdo, "/Humidity", h);  // Percentage value
@@ -464,7 +511,6 @@ void loop() {
           re10Finished = false;
         }
       }
-
       if (Firebase.getInt(fbdo, "/quantityphup")) {
         quantityphup = fbdo.to<int>();
         if (quantityphup != 0 && re1TaskHandle == NULL) {
@@ -570,6 +616,7 @@ void loop() {
       // isConnected();
       Serial.println("manual mode");
       delay(1000);
+    } else {
     }
   }
 }
