@@ -65,8 +65,6 @@ void PHsensor() {
 }
 
 void ReadHumiTemp() {
-  // Wait a few seconds between measurements.
-  // delay(1000);
 
   // อ่านค่าความชื้น
   h = dht.readHumidity();
@@ -81,11 +79,11 @@ void ReadHumiTemp() {
     return;
   }
 
-  // Serial.print(F("Humidity: "));
-  // Serial.print(h);
-  // Serial.print(F("% Temperature: "));
-  // Serial.print(t);
-  // Serial.println(F(" C "));
+  Serial.print(F("Humidity: "));
+  Serial.print(h);
+  Serial.print(F("% Temperature: "));
+  Serial.print(t);
+  Serial.println(F(" C "));
 }
 
 void WaterLevelH() {
@@ -145,6 +143,7 @@ void loop() {
   delay(500);
 
   PHsensor();
+
   delay(500);
   //////////////////////////////////
 

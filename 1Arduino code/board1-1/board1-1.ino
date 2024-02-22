@@ -116,10 +116,12 @@ void setup() {
   digitalWrite(re12, 1);
   delay(10);
 
+  wm.setClass("invert");
+  wm.setConfigPortalTimeout(30);  // auto close configportal after n seconds
   if (wm.autoConnect("@hydroponic farm")) {
     Serial.println("");
     Serial.println("Connected already WiFi : ");
-    Serial.println("OP Address : ");
+    Serial.println("IP Address : ");
     Serial.println(WiFi.localIP());
   } else {
     Serial.println("failed to connect");
