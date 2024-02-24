@@ -13,8 +13,6 @@ export class HomeComponent implements OnInit{
   pHValue:any
   fertilizersState:any
   waterState:any
-  fan:any
-  led:any
   pump_ph_down:any
   pump_ph_up:any
   pump_water_up:any
@@ -41,14 +39,64 @@ export class HomeComponent implements OnInit{
     this.auth.waterState().subscribe((state: any) => {
       this.waterState = state;
     });
-    const relaystate_fanRef = this.db.object('relaystate/fan').valueChanges();
-    relaystate_fanRef.subscribe((state: any) => {
-      this.updateSwitchState('fanSwitch', state);
+    let fan = this.db.object('relaystate/fan').valueChanges();
+    fan.subscribe((state: any) => {
+      this.updateSwitchState('fan', state);
     });
 
-    const relaystate_ledRef = this.db.object('relaystate/led').valueChanges();
-    relaystate_ledRef.subscribe((state: any) => {
-      this.updateSwitchState('ledSwitch', state);
+    let led = this.db.object('relaystate/led').valueChanges();
+    led.subscribe((state: any) => {
+      this.updateSwitchState('led', state);
+    });
+
+    let fertilizers = this.db.object('relaystate/fertilizers').valueChanges();
+    fertilizers.subscribe((state: any) => {
+      this.updateSwitchState('fertilizers', state);
+    });
+
+    let microbial = this.db.object('relaystate/microbial').valueChanges();
+    microbial.subscribe((state: any) => {
+      this.updateSwitchState('microbial', state);
+    });
+
+    let pumpStirring = this.db.object('relaystate/pumpStirring').valueChanges();
+    pumpStirring.subscribe((state: any) => {
+      this.updateSwitchState('pumpStirring', state);
+    });
+
+    let pumpUP = this.db.object('relaystate/pumpUP').valueChanges();
+    pumpUP.subscribe((state: any) => {
+      this.updateSwitchState('pumpUP', state);
+    });
+
+    let pumpphDown = this.db.object('relaystate/pumpphDown').valueChanges();
+    pumpphDown.subscribe((state: any) => {
+      this.updateSwitchState('pumpphDown', state);
+    });
+
+    let pumpphUP = this.db.object('relaystate/pumpphUP').valueChanges();
+    pumpphUP.subscribe((state: any) => {
+      this.updateSwitchState('pumpphUP', state);
+    });
+
+    let pumpwater = this.db.object('relaystate/pumpwater').valueChanges();
+    pumpwater.subscribe((state: any) => {
+      this.updateSwitchState('pumpwater', state);
+    });
+
+    let sprinkler_fertilizers = this.db.object('relaystate/sprinkler_fertilizers').valueChanges();
+    sprinkler_fertilizers.subscribe((state: any) => {
+      this.updateSwitchState('sprinkler_fertilizers', state);
+    });
+
+    let sprinkler_water = this.db.object('relaystate/sprinkler_water').valueChanges();
+    sprinkler_water.subscribe((state: any) => {
+      this.updateSwitchState('sprinkler_water', state);
+    });
+
+    let valve = this.db.object('relaystate/valve').valueChanges();
+    valve.subscribe((state: any) => {
+      this.updateSwitchState('valve', state);
     });
 
   }
@@ -66,11 +114,11 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  fanSwitch(event: any) {
+  fan(event: any) {
     this.db.object('relaystate/fan').set(event.target.checked);
   }
 
-  ledSwitch(event: any) {
+  led(event: any) {
     this.db.object('relaystate/led').set(event.target.checked);
   }
   fertilizers(event: any) {

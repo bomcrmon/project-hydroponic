@@ -8,18 +8,18 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   constructor(private fireauth : AngularFireAuth, private router :Router,private db: AngularFireDatabase) { }
-  relaystate_fanRef = this.db.list('relaystate/fan');
-  relaystate_fertilizers = this.db.list('relaystate/fertilizers');
-  relaystate_ledRef = this.db.list('relaystate/led');
-  relaystate_microbialRef = this.db.list('relaystate/microbial');
-  relaystate_pumpStirring = this.db.list('relaystate/pumpStirring');
-  relaystate_pumpUP = this.db.list('relaystate/pumpUP');
-  relaystate_pumpphDown = this.db.list('relaystate/pumpphDown');
-  relaystate_pumpphUP = this.db.list('relaystate/pumpphUP');
-  relaystate_pumpwater = this.db.list('relaystate/pumpwater');
-  relaystate_sprinklerfertilizers = this.db.list('relaystate/sprinklerfertilizers');
-  relaystate_sprinklerwater = this.db.list('relaystate/sprinklerwater');
-  relaystate_valve = this.db.list('relaystate/valve');
+  // fan = this.db.list('relaystate/fan');
+  // fertilizers = this.db.list('relaystate/fertilizers');
+  // ledRef = this.db.list('relaystate/led');
+  // microbialRef = this.db.list('relaystate/microbial');
+  // pumpStirring = this.db.list('relaystate/pumpStirring');
+  // pumpUP = this.db.list('relaystate/pumpUP');
+  // pumpphDown = this.db.list('relaystate/pumpphDown');
+  // pumpphUP = this.db.list('relaystate/pumpphUP');
+  // pumpwater = this.db.list('relaystate/pumpwater');
+  // sprinklerfertilizers = this.db.list('relaystate/sprinklerfertilizers');
+  // sprinklerwater = this.db.list('relaystate/sprinklerwater');
+  // valve = this.db.list('relaystate/valve');
 
   //login
   login(email :string, password: string){
