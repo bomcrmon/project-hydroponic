@@ -84,6 +84,7 @@ bool pumpphUP, pumpphDown, led, sprinklerwater, valve;
 void setup() {
   Serial.begin(115200);
   pinMode(SWrwf, INPUT_PULLUP);
+
   // กำหนดค่าขา GPIO 16 เป็นขา RX
   pinMode(16, INPUT);
   // กำหนดค่าขา GPIO 17 เป็นขา TX
@@ -114,7 +115,8 @@ void setup() {
   digitalWrite(re10, 1);
   digitalWrite(re11, 0);
   digitalWrite(re12, 1);
-  delay(10);
+
+
 
   wm.setClass("invert");
   wm.setConfigPortalTimeout(30);  // auto close configportal after n seconds
@@ -159,6 +161,7 @@ void setup() {
   Firebase.setDoubleDigits(5);
 
   Serial2.begin(115200);
+  delay(1000);
 }
 void Wifi_Reset() {
   if (digitalRead(SWrwf) == LOW) {
@@ -395,6 +398,7 @@ void loop() {
     }
   }
   Wifi_Reset();
+
   ///////รับค่าจากเซนเซอร์///////////////
   serialEvent();
   // รับข้อมูล
@@ -618,6 +622,49 @@ void loop() {
       // isConnected();
       Serial.println("manual mode");
       delay(1000);
+
+      NFRE(valve, re6);
+      delay(10);
+      NFRE(led, re3);
+      delay(10);
+      NFRE(pumpwater, re5);
+      delay(10);
+      NFRE(fan, re4);
+      delay(10);
+      if (!reActive1) {
+        NFRE(pumpphUP, re1);
+        delay(10);
+      }
+      if (!reActive2) {
+        NFRE(pumpphDown, re2);
+        delay(10);
+      }
+      if (!reActive7) {
+        NFRE(sprinklerfertilizers, re7);
+        delay(10);
+      }
+      if (!reActive8) {
+        NFRE(sprinklerwater, re8);
+        delay(10);
+      }
+      if (!reActive9) {
+        NFRE(fertilizers, re9);
+        delay(10);
+      }
+      if (!reActive10) {
+        NFRE(microbial, re10);
+        delay(10);
+      }
+
+      if (microbial || fertilizers || pumpphUP || pumpphDown) {
+        digitalWrite(re11, 1);
+        digitalWrite(re12, 0);
+      }
+
+      if (!reActive1 && !reActive2 && !reActive9 && !reActive10 && !microbial && !fertilizers && !pumpphUP && !pumpphDown) {
+        digitalWrite(re11, 0);
+        digitalWrite(re12, 1);
+      }
     } else {
     }
   }
