@@ -1,6 +1,5 @@
 #include "DHT.h"
 
-#define ActRe 26
 // #define waterHW 35
 #define waterXKClow 32
 #define waterXKChigh 33
@@ -28,14 +27,6 @@ bool waterstate;
 bool sendFlag = false;  // Control signal to indicate when to send data
 
 void setup() {
-  Serial2.begin(115200);
-  Serial.begin(115200);
-
-  pinMode(ActRe, OUTPUT);
-  digitalWrite(ActRe, 1);
-  delay(3000);
-  digitalWrite(ActRe, 0);
-
   pinMode(phport, INPUT);
   // pinMode(waterHW, INPUT);
   pinMode(waterXKChigh, INPUT_PULLDOWN);
@@ -44,7 +35,8 @@ void setup() {
 
   dht.begin();
 
-
+  Serial2.begin(115200);
+  Serial.begin(115200);
   analogReadResolution(12);
 }
 
@@ -137,7 +129,6 @@ void serialEvent() {
 }
 
 void loop() {
-
   /////อ่านค่าเซนเซอร์///////////////
   // fertilizerSensor();
   // delay(500);
