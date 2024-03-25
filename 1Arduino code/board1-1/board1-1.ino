@@ -81,9 +81,24 @@ bool fan, re1state, re2state, re3state, re4state;
 bool Autosystem, pumpwater, sprinklerfertilizers;
 bool pumpphUP, pumpphDown, led, sprinklerwater, valve;
 
+void connect() {
+  wm.setClass("invert");
+  wm.setConfigPortalTimeout(60);  // auto close configportal after n seconds
+  if (wm.autoConnect("@hydroponic farm")) {
+    Serial.println("");
+    Serial.println("Connected already WiFi : ");
+    Serial.println("IP Address : ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("failed to connect");
+    delay(1000);
+    ESP.restart();
+  }
+}
 void setup() {
   Serial.begin(115200);
   pinMode(SWrwf, INPUT_PULLUP);
+
   // กำหนดค่าขา GPIO 16 เป็นขา RX
   pinMode(16, INPUT);
   // กำหนดค่าขา GPIO 17 เป็นขา TX
@@ -116,18 +131,7 @@ void setup() {
   digitalWrite(re12, 1);
   delay(10);
 
-  wm.setClass("invert");
-  wm.setConfigPortalTimeout(30);  // auto close configportal after n seconds
-  if (wm.autoConnect("@hydroponic farm")) {
-    Serial.println("");
-    Serial.println("Connected already WiFi : ");
-    Serial.println("IP Address : ");
-    Serial.println(WiFi.localIP());
-  } else {
-    Serial.println("failed to connect");
-    delay(1000);
-    ESP.restart();
-  }
+  connect();
   // ////// Configures static IP address//////////////////////////////
   // if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
   //   Serial.println("STA Failed to configure");
@@ -140,11 +144,11 @@ void setup() {
   //   Serial.print(".");
   //   delay(100);
   // }
-  // //print localIP
+  //print localIP
   // Serial.println();
   // Serial.print("Connected with IP: ");
   // Serial.println(WiFi.localIP());
-  // // Serial.println();
+  // Serial.println();
 
   // Print ESP MAC Address
   Serial.print("MAC address: ");
@@ -159,6 +163,7 @@ void setup() {
   Firebase.setDoubleDigits(5);
 
   Serial2.begin(115200);
+  delay(1000);
 }
 void Wifi_Reset() {
   if (digitalRead(SWrwf) == LOW) {
@@ -384,17 +389,13 @@ void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
 }
 
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi connection lost. Reconnecting...");
-    if (wm.autoConnect("@hydroponic farm")) {
-      Serial.println("Reconnected to WiFi.");
-      Serial.println("OP Address : ");
-      Serial.println(WiFi.localIP());
-    } else {
-      Serial.println("Failed to reconnect to WiFi.");
-    }
+
+  while (WiFi.status() != WL_CONNECTED) {
+    connect();
   }
+
   Wifi_Reset();
+
   ///////รับค่าจากเซนเซอร์///////////////
   serialEvent();
   // รับข้อมูล
@@ -614,11 +615,54 @@ void loop() {
       }
       Serial.println("----------------------------------------------------");
       Serial.println();
-    } else if (Autosystem == false) {  //ถ้าเน็ตหลุดให้ทำการอะไร
-      // isConnected();
+    } else {  //ถ้าเน็ตหลุดให้ทำการอะไร
+      // connect();
       Serial.println("manual mode");
       delay(1000);
-    } else {
+
+      NFRE(valve, re6);
+      delay(10);
+      NFRE(led, re3);
+      delay(10);
+      NFRE(pumpwater, re5);
+      delay(10);
+      NFRE(fan, re4);
+      delay(10);
+      if (!reActive1) {
+        NFRE(pumpphUP, re1);
+        delay(10);
+      }
+      if (!reActive2) {
+        NFRE(pumpphDown, re2);
+        delay(10);
+      }
+      if (!reActive7) {
+        NFRE(sprinklerfertilizers, re7);
+        delay(10);
+      }
+      if (!reActive8) {
+        NFRE(sprinklerwater, re8);
+        delay(10);
+      }
+      if (!reActive9) {
+        NFRE(fertilizers, re9);
+        delay(10);
+      }
+      if (!reActive10) {
+        NFRE(microbial, re10);
+        delay(10);
+      }
+
+      if (microbial || fertilizers || pumpphUP || pumpphDown) {
+        digitalWrite(re11, 1);
+        digitalWrite(re12, 0);
+      }
+
+      if (!reActive1 && !reActive2 && !reActive9 && !reActive10 && !microbial && !fertilizers && !pumpphUP && !pumpphDown) {
+        digitalWrite(re11, 0);
+        digitalWrite(re12, 1);
+      }
+      ESP.restart();
     }
   }
 }
