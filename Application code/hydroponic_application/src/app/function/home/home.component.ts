@@ -5,23 +5,21 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   humidityValue: any;
-  temperatureValue:any
-  pHValue:any
-  fertilizersState:any
-  waterState:any
-  pump_ph_down:any
-  pump_ph_up:any
-  pump_water_up:any
-  sprinklerfertilizers:any
-  sprinklerwater:any
+  temperatureValue: any;
+  pHValue: any;
+  fertilizersState: any;
+  waterState: any;
+  pump_ph_down: any;
+  pump_ph_up: any;
+  pump_water_up: any;
+  sprinklerfertilizers: any;
+  sprinklerwater: any;
 
-  constructor(private auth:AuthService,private db: AngularFireDatabase) {
-    
-  }
+  constructor(private auth: AuthService, private db: AngularFireDatabase) {}
 
   ngOnInit(): void {
     this.auth.humidityValue().subscribe((value: any) => {
@@ -84,12 +82,16 @@ export class HomeComponent implements OnInit{
       this.updateSwitchState('pumpwater', state);
     });
 
-    let sprinkler_fertilizers = this.db.object('relaystate/sprinkler_fertilizers').valueChanges();
+    let sprinkler_fertilizers = this.db
+      .object('relaystate/sprinkler_fertilizers')
+      .valueChanges();
     sprinkler_fertilizers.subscribe((state: any) => {
       this.updateSwitchState('sprinkler_fertilizers', state);
     });
 
-    let sprinkler_water = this.db.object('relaystate/sprinkler_water').valueChanges();
+    let sprinkler_water = this.db
+      .object('relaystate/sprinkler_water')
+      .valueChanges();
     sprinkler_water.subscribe((state: any) => {
       this.updateSwitchState('sprinkler_water', state);
     });
@@ -98,14 +100,11 @@ export class HomeComponent implements OnInit{
     valve.subscribe((state: any) => {
       this.updateSwitchState('valve', state);
     });
-
   }
 
-
-  logout(){
-  this.auth.logout();
+  logout() {
+    this.auth.logout();
   }
-
 
   updateSwitchState(switchId: string, state: boolean) {
     const switchElement = document.getElementById(switchId) as HTMLInputElement;
@@ -151,7 +150,4 @@ export class HomeComponent implements OnInit{
   valve(event: any) {
     this.db.object('relaystate/valve').set(event.target.checked);
   }
-
-
-
 }

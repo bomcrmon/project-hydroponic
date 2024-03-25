@@ -82,8 +82,10 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './function/home/home.component';
 import { LoginComponent } from './function/login/login.component';
 import { RegisterComponent } from './function/register/register.component';
+import { LoginOutletComponent } from './outlet/login-outlet/login-outlet.component';
+import { OutletComponent } from './outlet/outlet/outlet.component';
 @NgModule({
-  declarations: [AppComponent, HomeComponent, LoginComponent, RegisterComponent],
+  declarations: [AppComponent, HomeComponent, LoginComponent, RegisterComponent, LoginOutletComponent, OutletComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

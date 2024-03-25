@@ -8,18 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   constructor(private fireauth : AngularFireAuth, private router :Router,private db: AngularFireDatabase) { }
-  // fan = this.db.list('relaystate/fan');
-  // fertilizers = this.db.list('relaystate/fertilizers');
-  // ledRef = this.db.list('relaystate/led');
-  // microbialRef = this.db.list('relaystate/microbial');
-  // pumpStirring = this.db.list('relaystate/pumpStirring');
-  // pumpUP = this.db.list('relaystate/pumpUP');
-  // pumpphDown = this.db.list('relaystate/pumpphDown');
-  // pumpphUP = this.db.list('relaystate/pumpphUP');
-  // pumpwater = this.db.list('relaystate/pumpwater');
-  // sprinklerfertilizers = this.db.list('relaystate/sprinklerfertilizers');
-  // sprinklerwater = this.db.list('relaystate/sprinklerwater');
-  // valve = this.db.list('relaystate/valve');
+
 
   //login
   login(email :string, password: string){
