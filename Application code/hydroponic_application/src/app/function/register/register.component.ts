@@ -9,6 +9,8 @@ import { AuthService } from 'src/app/service/auth.service';
 export class RegisterComponent implements OnInit{
   email:any
   password:any
+  username:any
+  ConfirmPassword:any
 
   constructor(private auth: AuthService){}
 

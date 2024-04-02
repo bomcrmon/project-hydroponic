@@ -1,15 +1,25 @@
 <body>
-    <div class="container-fluid p-0" style="overflow: hidden">
-      <img class="bg-main img-fluid" src="assets/imgs/Login1_bg.png" alt="" />
-      <img class="bg-main2" src="assets/imgs/Login (2).png" alt="" />
-      <div class="abs-3">
-        <div class="row m-0 p-0">
-          <div class="col m-0 p-0 d-flex justify-content-center">
-            <div class="container">
-              <router-outlet> </router-outlet>
+  <div class="container-fluid p-0 bg-color">
+    <div class="row h-100">
+      <div class="col p-0">
+        <img src="assets\image\logo.png" alt="" class="logo" />
+        <img src="assets\image\Bg-blen.png" class="bg-blen" alt="" />
+        <img src="assets\image\farm.png" class="bg-farm" alt="" />
+        <span class="title-login title">HYDROPONIC FARM</span>
+        <span class="title-login2 title">APPLICATION</span>
+      </div>
+
+      <div class="col-7 h-100 bg-wh" style="z-index: 2;">
+        <div class="abs-3">
+          <div class="row m-0 p-0">
+            <div class="col m-0 p-0 d-flex justify-content-center">
+              <div class="container">
+                <router-outlet> </router-outlet>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>

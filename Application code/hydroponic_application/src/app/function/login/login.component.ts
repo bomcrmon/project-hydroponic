@@ -26,4 +26,8 @@ export class LoginComponent implements OnInit {
   this.email='';
   this.password='';
 }
+
+GoRegister(){
+  window.location.href = 'register'
+}
 }

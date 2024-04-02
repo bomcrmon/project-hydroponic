@@ -1,14 +1,86 @@
-<button (click)="logout()">logout</button>
+<!-- <button (click)="logout()">logout</button> -->
 
 <div class="row">
-  <h2>Humidity: {{ humidityValue }}</h2>
-  <h2>Temperature: {{ temperatureValue }}</h2>
-  <h2>pH Value: {{ pHValue }}</h2>
-  <h2>Fertilizers State: {{ fertilizersState ? "On" : "Off" }}</h2>
-  <h2>Water State: {{ waterState ? "On" : "Off" }}</h2>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <div class="row p-5">
+          <div class="col">
+            <div class="row mb-4">
+              <div class="col-4 center">
+                <img src="assets\icon\cloud.png" />
+              </div>
+              <div class="col-4 center">
+                <img src="assets\icon\humidity.svg" />
+              </div>
+              <div class="col-4 center">
+                <img src="assets\icon\thermometer.svg" />
+              </div>
+            </div>
+
+            <div class="row f-40 fw-700">
+              <div class="col-4">
+                <p class="center">{{ temperatureValue }}</p>
+              </div>
+              <div class="col-4">
+                <p class="center">{{ humidityValue }}</p>
+              </div>
+              <div class="col-4">
+                <p class="center">{{ pHValue }}</p>
+              </div>
+            </div>
+
+            <div class="row fw-600 f-28 mb-4">
+              <div class="col-4">
+                <p class="center pad-20">Temperature</p>
+              </div>
+              <div class="col-4">
+                <p class="center pad-20">Humidity</p>
+              </div>
+              <div class="col-4">
+                <p class="center pad-20">pH</p>
+              </div>
+            </div>
+
+            <div class="row m-0 p-3">
+              <div class="col-6 m-0">
+                <p
+                  class="m-0 box align-items-center d-flex justify-content-center"
+                >
+                  <span>Fertilizers State: </span>
+                  <span
+                    [class.c-red]="fertilizersState == false"
+                    [class.c-green]="fertilizersState == true"
+                    >{{ fertilizersState ? "On" : "Off" }}</span
+                  >
+                </p>
+              </div>
+              <div class="col-6 m-0">
+                <p
+                  class="m-0 box align-items-center d-flex justify-content-center"
+                >
+                  <span>Water State: </span>
+                  <span>{{ waterState ? "On" : "Off" }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-6">
+        <button class="btn button-w fw-700 f-28">กดเพื่อเติมน้ำ</button>
+      </div>
+      <div class="col-6">
+        <button class="btn button-wa fw-700 f-28">กดเพื่อเติมน้ำตามปริมาตร</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
   <div class="col">
     <h1>relay State</h1>
 
@@ -192,4 +264,4 @@
       >
     </div>
   </div>
-</div>
+</div> -->

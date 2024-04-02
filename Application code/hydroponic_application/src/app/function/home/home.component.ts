@@ -21,22 +21,9 @@ export class HomeComponent implements OnInit {
 
   constructor(private auth: AuthService, private db: AngularFireDatabase) {}
 
-  ngOnInit(): void {
-    this.auth.humidityValue().subscribe((value: any) => {
-      this.humidityValue = value;
-    });
-    this.auth.temperatureValue().subscribe((value: any) => {
-      this.temperatureValue = value;
-    });
-    this.auth.pHValue().subscribe((value: any) => {
-      this.pHValue = value;
-    });
-    this.auth.fertilizersState().subscribe((state: any) => {
-      this.fertilizersState = state;
-    });
-    this.auth.waterState().subscribe((state: any) => {
-      this.waterState = state;
-    });
+  async ngOnInit(): Promise<void> {
+    await this.getdata()
+
     let fan = this.db.object('relaystate/fan').valueChanges();
     fan.subscribe((state: any) => {
       this.updateSwitchState('fan', state);
@@ -104,6 +91,24 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.auth.logout();
+  }
+
+  async getdata(){
+    await this.auth.humidityValue().subscribe((value: any) => {
+      this.humidityValue = parseFloat(value.toFixed(2));
+    });
+    await this.auth.temperatureValue().subscribe((value: any) => {
+      this.temperatureValue = parseFloat(value.toFixed(2));
+    });
+    await this.auth.pHValue().subscribe((value: any) => {
+      this.pHValue = value;
+    });
+    await this.auth.fertilizersState().subscribe((state: any) => {
+      this.fertilizersState = state;
+    });
+    await this.auth.waterState().subscribe((state: any) => {
+      this.waterState = state;
+    });
   }
 
   updateSwitchState(switchId: string, state: boolean) {
