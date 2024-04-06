@@ -2,28 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/service/auth.service';
 import { environment } from 'src/environments/environment';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
-})
-export class HomeComponent implements OnInit {
-  humidityValue: any;
-  temperatureValue: any;
-  pHValue: any;
-  waterStateHigh: any;
-  waterStateLow: any;
-  pump_ph_down: any;
-  pump_ph_up: any;
-  pump_water_up: any;
-  sprinklerfertilizers: any;
-  sprinklerwater: any;
 
+@Component({
+  selector: 'app-relay',
+  templateUrl: './relay.component.html',
+  styleUrls: ['./relay.component.css'],
+})
+export class RelayComponent {
   constructor(private auth: AuthService, private db: AngularFireDatabase) {}
 
   async ngOnInit(): Promise<void> {
-    await this.getdata()
+    this.getData()
+  }
 
+  getData() {
     let fan = this.db.object('relaystate/fan').valueChanges();
     fan.subscribe((state: any) => {
       this.updateSwitchState('fan', state);
@@ -87,32 +79,6 @@ export class HomeComponent implements OnInit {
     valve.subscribe((state: any) => {
       this.updateSwitchState('valve', state);
     });
-  }
-
-  logout() {
-    this.auth.logout();
-  }
-
-  async getdata(){
-    await this.auth.humidityValue().subscribe((value: any) => {
-      this.humidityValue = parseFloat(value.toFixed(2));
-    });
-    await this.auth.temperatureValue().subscribe((value: any) => {
-      this.temperatureValue = parseFloat(value.toFixed(2));
-    });
-    await this.auth.pHValue().subscribe((value: any) => {
-      this.pHValue = parseFloat(value.toFixed(2));
-    });
-    await this.auth.waterStateHigh().subscribe((state: any) => {
-      this.waterStateHigh = state;
-    });
-    await this.auth.waterStateLow().subscribe((state: any) => {
-      this.waterStateLow = state;
-    });
-
-    console.log(this.waterStateLow,'waterStateLow');
-    console.log(this.waterStateHigh,'waterStateHigh');
-    
   }
 
   updateSwitchState(switchId: string, state: boolean) {

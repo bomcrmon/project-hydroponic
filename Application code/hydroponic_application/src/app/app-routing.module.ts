@@ -5,6 +5,8 @@ import { RegisterComponent } from './function/register/register.component';
 import { HomeComponent } from './function/home/home.component';
 import { OutletComponent } from './outlet/outlet/outlet.component';
 import { LoginOutletComponent } from './outlet/login-outlet/login-outlet.component';
+import { QuantityComponent } from './function/quantity/quantity.component';
+import { RelayComponent } from './function/relay/relay.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'login',pathMatch:'full'},
@@ -41,6 +43,16 @@ const routes: Routes = [
     path: 'home',
     component: OutletComponent,
     children: [{ path: '', component: HomeComponent }],
+  },
+  {
+    path: 'quantity',
+    component: OutletComponent,
+    children: [{ path: '', component: QuantityComponent }],
+  },
+  {
+    path: 'relay',
+    component: OutletComponent,
+    children: [{ path: '', component: RelayComponent }],
   },
 ];
 

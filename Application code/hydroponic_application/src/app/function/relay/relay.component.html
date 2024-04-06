@@ -1,0 +1,205 @@
+<div class="row">
+  <div class="col">
+    <p class="f-40 fw-700 text-center">Relay State</p>
+
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-4">
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Fan </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="fan"
+                    id="fan"
+                    (change)="fan($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> LED </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="led"
+                    id="led"
+                    (change)="led($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Fertilizers </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="fertilizers"
+                    id="fertilizers"
+                    (change)="fertilizers($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Microbial </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="microbial"
+                    id="microbial"
+                    (change)="microbial($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> PumpStirring </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="pumpStirring"
+                    id="pumpStirring"
+                    (change)="pumpStirring($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> PumpUP </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="pumpUP"
+                    id="pumpUP"
+                    (change)="pumpUP($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> PumpphDown </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="pumpphDown"
+                    id="pumpphDown"
+                    (change)="pumpphDown($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> PumpphUP </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="pumpphUP"
+                    id="pumpphUP"
+                    (change)="pumpphUP($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Pumpwater </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="pumpwater"
+                    id="pumpwater"
+                    (change)="pumpwater($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Sprinkler Fertilizers </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="sprinkler_fertilizers"
+                    id="sprinkler_fertilizers"
+                    (change)="sprinkler_fertilizers($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Sprinkler Water </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="sprinkler_water"
+                    id="sprinkler_water"
+                    (change)="sprinkler_water($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div
+                class="col-md-4 col-12 mb-2 d-flex align-items-center"
+                style="text-overflow: ellipsis"
+              >
+                <label class="me-2 f-b"> Valve </label>
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="valve"
+                    id="valve"
+                    (change)="valve($event)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

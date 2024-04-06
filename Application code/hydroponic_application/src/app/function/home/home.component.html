@@ -47,11 +47,11 @@
                 <p
                   class="m-0 box align-items-center d-flex justify-content-center"
                 >
-                  <span>Fertilizers State: </span>
+                  <span>Water State High:</span>&nbsp;
                   <span
-                    [class.c-red]="fertilizersState == false"
-                    [class.c-green]="fertilizersState == true"
-                    >{{ fertilizersState ? "On" : "Off" }}</span
+                    [class.c-red]="waterStateHigh == false"
+                    [class.c-green]="waterStateHigh == true"
+                    >{{ waterStateHigh == true ? 'On' : 'Off'}}</span
                   >
                 </p>
               </div>
@@ -59,8 +59,12 @@
                 <p
                   class="m-0 box align-items-center d-flex justify-content-center"
                 >
-                  <span>Water State: </span>
-                  <span>{{ waterState ? "On" : "Off" }}</span>
+                  <span>Water State Low:</span>&nbsp;
+                  <span
+                    [class.c-red]="waterStateLow == false"
+                    [class.c-green]="waterStateLow == true"
+                    >{{ waterStateLow == true ? 'On' : 'Off' }}</span
+                  >
                 </p>
               </div>
             </div>
@@ -74,7 +78,9 @@
         <button class="btn button-w fw-700 f-28">กดเพื่อเติมน้ำ</button>
       </div>
       <div class="col-6">
-        <button class="btn button-wa fw-700 f-28">กดเพื่อเติมน้ำตามปริมาตร</button>
+        <button class="btn button-wa fw-700 f-28">
+          กดเพื่อเติมน้ำตามปริมาตร
+        </button>
       </div>
     </div>
   </div>

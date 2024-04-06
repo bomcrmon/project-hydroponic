@@ -55,11 +55,11 @@ logout(){
   pHValue() {
     return this.db.object('pHValue').valueChanges();
   }
-  fertilizersState() {
-    return this.db.object('fertilizersState').valueChanges();
+  waterStateLow() {
+    return this.db.object('waterstatelow').valueChanges();
   }
-  waterState () {
-    return this.db.object('waterState').valueChanges();
+  waterStateHigh () {
+    return this.db.object('waterstatehigh').valueChanges();
   }
 
 }

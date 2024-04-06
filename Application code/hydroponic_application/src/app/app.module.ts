@@ -84,8 +84,10 @@ import { LoginComponent } from './function/login/login.component';
 import { RegisterComponent } from './function/register/register.component';
 import { LoginOutletComponent } from './outlet/login-outlet/login-outlet.component';
 import { OutletComponent } from './outlet/outlet/outlet.component';
+import { QuantityComponent } from './function/quantity/quantity.component';
+import { RelayComponent } from './function/relay/relay.component';
 @NgModule({
-  declarations: [AppComponent, HomeComponent, LoginComponent, RegisterComponent, LoginOutletComponent, OutletComponent],
+  declarations: [AppComponent, HomeComponent, LoginComponent, RegisterComponent, LoginOutletComponent, OutletComponent, QuantityComponent, RelayComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
