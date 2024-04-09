@@ -7,21 +7,41 @@
         <div class="card">
           <div class="card-body">
             <div class="col d-flex justify-content-center">ปุ๋ย</div>
-            <div class="col">
-              <button class="btn" (click)="FT(250)" [class.active]="Fer == 250">
-                250 ml
-              </button>
-            </div>
-            <div class="col">
-              <button class="btn" (click)="FT(500)" [class.active]="Fer == 500">
-                500 ml
-              </button>
-            </div>
-            <div class="col">
-              <button class="btn" (click)="FT(750)" [class.active]="Fer == 750">
-                750 ml
-              </button>
-            </div>
+            <ng-container>
+              <div class="col">
+                <button
+                  class="btn"
+                  (click)="FT(250)"
+                  [class.active]="Fer == 13"
+                  [disabled]="Mb != 0 && phUp != 0 && phD != 0"
+                  [ngClass]="{ 'btn-dis': Mb != 0 && phUp != 0 && phD != 0 }"
+                >
+                  250 ml
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  class="btn"
+                  (click)="FT(500)"
+                  [class.active]="Fer == 26"
+                  [disabled]="Mb != 0 && phUp != 0 && phD != 0"
+                  [ngClass]="{ 'btn-dis': Mb != 0 && phUp != 0 && phD != 0 }"
+                >
+                  500 ml
+                </button>
+              </div>
+              <!-- <div class="col">
+                <button
+                  class="btn"
+                  (click)="FT(750)"
+                  [class.active]="Fer == 30"
+                  [disabled]="Mb != 0 && phUp != 0 && phD != 0"
+                  [ngClass]="{ 'btn-dis': Mb != 0 && phUp != 0 && phD != 0 }"
+                >
+                  750 ml
+                </button>
+              </div> -->
+            </ng-container>
           </div>
         </div>
       </div>
@@ -30,20 +50,38 @@
           <div class="card-body">
             <div class="col d-flex justify-content-center">สารอาหาร</div>
             <div class="col">
-              <button class="btn" (click)="MB(250)" [class.active]="Mb == 250">
+              <button
+                class="btn"
+                (click)="MB(250)"
+                [class.active]="Mb == 13"
+                [disabled]="Fer != 0 && phUp != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && phUp != 0 && phD != 0 }"
+              >
                 250 ml
               </button>
             </div>
             <div class="col">
-              <button class="btn" (click)="MB(500)" [class.active]="Mb == 500">
+              <button
+                class="btn"
+                (click)="MB(500)"
+                [class.active]="Mb == 26"
+                [disabled]="Fer != 0 && phUp != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && phUp != 0 && phD != 0 }"
+              >
                 500 ml
               </button>
             </div>
-            <div class="col">
-              <button class="btn" (click)="MB(750)" [class.active]="Mb == 750">
+            <!-- <div class="col">
+              <button
+                class="btn"
+                (click)="MB(750)"
+                [class.active]="Mb == 30"
+                [disabled]="Fer != 0 && phUp != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && phUp != 0 && phD != 0 }"
+              >
                 750 ml
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -55,7 +93,9 @@
               <button
                 class="btn"
                 (click)="PhUp(250)"
-                [class.active]="phUp == 250"
+                [class.active]="phUp == 13"
+                [disabled]="Fer != 0 && Mb != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phD != 0 }"
               >
                 250 ml
               </button>
@@ -64,20 +104,24 @@
               <button
                 class="btn"
                 (click)="PhUp(500)"
-                [class.active]="phUp == 500"
+                [class.active]="phUp == 26"
+                [disabled]="Fer != 0 && Mb != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phD != 0 }"
               >
                 500 ml
               </button>
             </div>
-            <div class="col">
+            <!-- <div class="col">
               <button
                 class="btn"
                 (click)="PhUp(750)"
-                [class.active]="phUp == 750"
+                [class.active]="phUp == 30"
+                [disabled]="Fer != 0 && Mb != 0 && phD != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phD != 0 }"
               >
                 750 ml
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -89,7 +133,9 @@
               <button
                 class="btn"
                 (click)="PhD(250)"
-                [class.active]="phD == 250"
+                [class.active]="phD == 13"
+                [disabled]="Fer != 0 && Mb != 0 && phUp != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phUp != 0 }"
               >
                 250 ml
               </button>
@@ -98,26 +144,39 @@
               <button
                 class="btn"
                 (click)="PhD(500)"
-                [class.active]="phD == 500"
+                [class.active]="phD == 26"
+                [disabled]="Fer != 0 && Mb != 0 && phUp != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phUp != 0 }"
               >
                 500 ml
               </button>
             </div>
-            <div class="col">
+            <!-- <div class="col">
               <button
                 class="btn"
                 (click)="PhD(750)"
-                [class.active]="phD == 750"
+                [class.active]="phD == 30"
+                [disabled]="Fer != 0 && Mb != 0 && phUp != 0"
+                [ngClass]="{ 'btn-dis': Fer != 0 && Mb != 0 && phUp != 0 }"
               >
                 750 ml
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
     </div>
 
-    <p class="f-40 fw-700 text-center">Sprinkler</p>
+    <div class="row mt-4">
+      <div class="col justify-content-end d-flex">
+        <button class="btn reset" (click)="reset()">reset</button>
+      </div>
+      <div class="col justify-content-start d-flex">
+        <button class="btn submit" (click)="submit()">submit</button>
+      </div>
+    </div>
+
+    <!-- <p class="f-40 fw-700 text-center">Sprinkler</p>
 
     <div class="row">
       <div class="col">
@@ -128,33 +187,27 @@
                 <span class="">Sprinkler Fertilizers </span>
               </div>
               <div class="col-8">
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SF(250)"
-                    [class.active]="sf == 250"
-                  >
-                    250 ml
-                  </button>
-                </div>
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SF(500)"
-                    [class.active]="sf == 500"
-                  >
-                    500 ml
-                  </button>
-                </div>
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SF(750)"
-                    [class.active]="sf == 750"
-                  >
-                    750 ml
-                  </button>
-                </div>
+                <button
+                  class="btn"
+                  (click)="SF(250)"
+                  [class.active]="sf == 10"
+                >
+                  250 ml
+                </button>
+                <button
+                  class="btn"
+                  (click)="SF(500)"
+                  [class.active]="sf == 20"
+                >
+                  500 ml
+                </button>
+                <button
+                  class="btn"
+                  (click)="SF(750)"
+                  [class.active]="sf == 30"
+                >
+                  750 ml
+                </button>
               </div>
             </div>
 
@@ -163,38 +216,34 @@
                 <span class="">Sprinkler Water </span>
               </div>
               <div class="col-8">
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SW(250)"
-                    [class.active]="sw == 250"
-                  >
-                    250 ml
-                  </button>
-                </div>
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SW(500)"
-                    [class.active]="sw == 500"
-                  >
-                    500 ml
-                  </button>
-                </div>
-                <div class="col">
-                  <button
-                    class="btn"
-                    (click)="SW(750)"
-                    [class.active]="sw == 750"
-                  >
-                    750 ml
-                  </button>
-                </div>
+                <button
+                  class="btn"
+                  (click)="SW(250)"
+                  [class.active]="sw == 10"
+                >
+                  250 ml
+                </button>
+                <button
+                  class="btn"
+                  (click)="SW(500)"
+                  [class.active]="sw == 20"
+                >
+                  500 ml
+                </button>
+                <button
+                  class="btn"
+                  (click)="SW(750)"
+                  [class.active]="sw == 30"
+                >
+                  750 ml
+                </button>
               </div>
             </div>
+
+            
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

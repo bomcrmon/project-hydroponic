@@ -6,21 +6,20 @@
     border: 3px solid #000000;
     margin: 4px;
 }
-.card{
+
+.card {
     background-color: white;
 }
 
-.btn:hover{
-    background-color: #41FF54;
-    border: 3px solid #00C614
+.btn:hover {
+    background-color: #eecf06;
 }
 
-.btn:active{
-    background-color: #41FF54;
-    border: 3px solid #00C614
+.btn:active {
+    background-color: #eecf06;
 }
 
-.active{
-    background-color: #41FF54;
-    border: 3px solid #00C614
+.btn-dis {
+    background-color: #c3c3c3;
+    color: #000000;
 }

@@ -7,6 +7,7 @@ import { OutletComponent } from './outlet/outlet/outlet.component';
 import { LoginOutletComponent } from './outlet/login-outlet/login-outlet.component';
 import { QuantityComponent } from './function/quantity/quantity.component';
 import { RelayComponent } from './function/relay/relay.component';
+import { SprinkerComponent } from './function/sprinker/sprinker.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'login',pathMatch:'full'},
@@ -53,6 +54,11 @@ const routes: Routes = [
     path: 'relay',
     component: OutletComponent,
     children: [{ path: '', component: RelayComponent }],
+  },
+  {
+    path: 'sprinker',
+    component: OutletComponent,
+    children: [{ path: '', component: SprinkerComponent }],
   },
 ];
 

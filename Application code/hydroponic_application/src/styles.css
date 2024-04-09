@@ -339,3 +339,58 @@ a:hover {
   .slider.round:before {
     border-radius: 50%;
   }
+
+  .alert-btn-cancel {
+    color: #FFF !important;
+    font-weight: 600;
+    border: 1px #F24E1E solid !important;
+    width: 100px !important;
+    border-radius: 50px !important;
+    background-color: #F24E1E !important;
+  }
+
+  .alert-btn-confirm {
+    color: #FFF !important;
+    font-weight: 600;
+    border: 1px #00C514 solid !important;
+    width: 100px !important;
+    border-radius: 50px !important;
+    background-color: #00C514 !important;
+  }
+
+
+.reset {
+    background-color: #d01212;
+    color: white;
+
+}
+
+.reset:hover {
+    background-color: #950505;
+    color: white;
+}
+
+.reset:active {
+    background-color: #950505;
+    color: white;
+}
+
+.submit {
+    background-color: #1eee33;
+    color: white;
+}
+
+.submit:hover {
+    background-color: #19c82a;
+    color: white;
+}
+
+.submit:active {
+    background-color: #19c82a;
+    color: white;
+}
+
+.active {
+    background-color: #eecf06;
+}
+  

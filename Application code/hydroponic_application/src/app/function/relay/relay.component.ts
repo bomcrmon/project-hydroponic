@@ -116,12 +116,6 @@ export class RelayComponent {
   pumpwater(event: any) {
     this.db.object('relaystate/pumpwater').set(event.target.checked);
   }
-  sprinkler_fertilizers(event: any) {
-    this.db.object('relaystate/sprinklerfertilizers').set(event.target.checked);
-  }
-  sprinkler_water(event: any) {
-    this.db.object('relaystate/sprinklerwater').set(event.target.checked);
-  }
   valve(event: any) {
     this.db.object('relaystate/valve').set(event.target.checked);
   }
