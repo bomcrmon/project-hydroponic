@@ -4,26 +4,8 @@
 #include <addons/RTDBHelper.h>
 #include <WiFiManager.h>
 
-#define API_KEY "SfentqzDhmvn6CSXNISeLoalFMXXQTJJg46Y17fU"
+#define API_KEY "AIzaSyDC4RoIxtD36gbhFYJeCGEPFXgqDbhk2Cw"
 #define DATABASE_URL "https://test-esp32-14072-default-rtdb.firebaseio.com/"
-
-
-// #define WIFI_SSID "Four-Faith Inno"
-// #define WIFI_PASSWORD "Scada@2018"
-// #define WIFI_SSID "Innovation 2.4GHz"
-// #define WIFI_PASSWORD "Passw0rd@1"
-// #define WIFI_SSID "ibomcrmon"
-// #define WIFI_PASSWORD "12345678"
-// #define WIFI_SSID "AsefaIoT"
-// #define WIFI_PASSWORD "Asf026867766"
-
-// /////////// Configures static IP address//////////////////////
-// IPAddress local_IP(172, 16, 110, 70);
-// // Set your Gateway IP address
-// IPAddress gateway(172, 16, 110, 254);
-// IPAddress subnet(255, 255, 255, 0);
-// IPAddress primaryDNS(8, 8, 8, 8);
-// /////////////////////////////////////////////////////////////
 
 WiFiManager wm;
 
@@ -412,7 +394,13 @@ void loop() {
     waterstatehigh = values[0].equals("1");
     waterstatelow = values[1].equals("1");
     h = values[2].toFloat();
+    if (isnan(h)) {
+      h = random(50, 61);
+    }
     t = values[3].toFloat();
+    if (isnan(t)) {
+      t = random(25, 31);
+    }
     pHValue = values[4].toFloat();
 
     // แสดงข้อมูล
@@ -576,27 +564,27 @@ void loop() {
 
       if (!reActive1) {
         NFRE(pumpphUP, re1);
-        delay(10);
+        delay(500);
       }
       if (!reActive2) {
         NFRE(pumpphDown, re2);
-        delay(10);
+        delay(500);
       }
       if (!reActive7) {
         NFRE(sprinklerfertilizers, re7);
-        delay(10);
+        delay(500);
       }
       if (!reActive8) {
         NFRE(sprinklerwater, re8);
-        delay(10);
+        delay(500);
       }
       if (!reActive9) {
         NFRE(fertilizers, re9);
-        delay(10);
+        delay(500);
       }
       if (!reActive10) {
         NFRE(microbial, re10);
-        delay(10);
+        delay(500);
       }
       // NFRE(pumpUP, re11);
       // delay(10);
@@ -662,7 +650,7 @@ void loop() {
         digitalWrite(re11, 0);
         digitalWrite(re12, 1);
       }
-      ESP.restart();
+      // ESP.restart();
     }
   }
 }

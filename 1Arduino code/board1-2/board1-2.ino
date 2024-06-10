@@ -9,6 +9,7 @@
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 
+#define Start 26
 //--------phsensor------------
 long phTot;
 float pHValue, phAvg, phVoltage;
@@ -27,17 +28,34 @@ bool waterstate;
 bool sendFlag = false;  // Control signal to indicate when to send data
 
 void setup() {
+  pinMode(Start, OUTPUT);
+  digitalWrite(Start, HIGH);  // ตั้งค่าเริ่มต้นให้พิน START_PIN เป็น HIGH
   pinMode(phport, INPUT);
   // pinMode(waterHW, INPUT);
   pinMode(waterXKChigh, INPUT_PULLDOWN);
   pinMode(waterXKClow, INPUT_PULLDOWN);
   delay(1000);
 
+  digitalWrite(Start, 1);
+  delay(2000);
+  digitalWrite(Start, 0);
+  delay(2000);
+  // digitalWrite(Start, 1);
+
   dht.begin();
 
   Serial2.begin(115200);
   Serial.begin(115200);
   analogReadResolution(12);
+}
+
+void resetDHTSensor() {
+  pinMode(DHTPIN, OUTPUT);    // ตั้งค่าเป็น OUTPUT
+  digitalWrite(DHTPIN, LOW);  // เขียนค่า LOW
+  delay(1000);                 // รอเล็กน้อย
+  pinMode(DHTPIN, INPUT);     // ตั้งค่าเป็น INPUT
+  dht.begin();                // เริ่มต้นเซ็นเซอร์ DHT ใหม่
+  delay(1000); 
 }
 
 void PHsensor() {
@@ -66,24 +84,46 @@ void PHsensor() {
 
 void ReadHumiTemp() {
 
-  // อ่านค่าความชื้น
-  h = dht.readHumidity();
-  // อ่านอุณหภูมิเป็นเซลเซียส (ค่าเริ่มต้น)
-  t = dht.readTemperature();
-  // // อ่านอุณหภูมิเป็นฟาเรนไฮต์ (isFahrenheit = true)
-  // float f = dht.readTemperature(true);
+  // // อ่านค่าความชื้น
+  // h = dht.readHumidity();
+  // // อ่านอุณหภูมิเป็นเซลเซียส (ค่าเริ่มต้น)
+  // t = dht.readTemperature();
+  // // // อ่านอุณหภูมิเป็นฟาเรนไฮต์ (isFahrenheit = true)
+  // // float f = dht.readTemperature(true);
 
-  // ตรวจสอบว่าการอ่านล้มเหลวและออกก่อนกําหนดหรือไม่ (เพื่อลองอีกครั้ง)
-  if (isnan(h) || isnan(t)) {
-    Serial.println(F("Failed to read from DHT sensor!"));
-    return;
+  // // ตรวจสอบว่าการอ่านล้มเหลวและออกก่อนกําหนดหรือไม่ (เพื่อลองอีกครั้ง)
+  // if (isnan(h) || isnan(t)) {
+  //   Serial.println(F("Failed to read from DHT sensor!"));
+  //   // ESP.restart();
+  //   return;
+  // }
+
+
+  const int maxRetries = 2;
+  int retryCount = 0;
+  bool success = false;
+
+  while (retryCount < maxRetries) {
+    h = dht.readHumidity();
+    t = dht.readTemperature();
+
+    if (!isnan(h) && !isnan(t)) {
+      success = true;
+      Serial.print(F("Humidity: "));
+      Serial.print(h);
+      Serial.print(F("% Temperature: "));
+      Serial.print(t);
+      Serial.println(F(" C "));
+      break;
+    }
+
+    retryCount++;
+    Serial.println(F("Failed to read from DHT sensor! Retrying..."));
+    // dht.begin();
+
+    delay(2000);  // รอก่อนที่จะลองใหม่
   }
-
-  Serial.print(F("Humidity: "));
-  Serial.print(h);
-  Serial.print(F("% Temperature: "));
-  Serial.print(t);
-  Serial.println(F(" C "));
+  resetDHTSensor();
 }
 
 void WaterLevelH() {
