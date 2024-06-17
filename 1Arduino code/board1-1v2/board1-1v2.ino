@@ -2,33 +2,21 @@
 #include <FirebaseESP32.h>
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
+#include <WiFiManager.h>
 
-#define API_KEY "SfentqzDhmvn6CSXNISeLoalFMXXQTJJg46Y17fU"
+#define API_KEY "AIzaSyDC4RoIxtD36gbhFYJeCGEPFXgqDbhk2Cw"
 #define DATABASE_URL "https://test-esp32-14072-default-rtdb.firebaseio.com/"
 
-#define WIFI_SSID "Four-Faith Inno"
-#define WIFI_PASSWORD "Scada@2018"
-// #define WIFI_SSID "Innovation 2.4GHz"
-// #define WIFI_PASSWORD "Passw0rd@1"
-// #define WIFI_SSID "ibomcrmon"
-// #define WIFI_PASSWORD "12345678"
-// #define WIFI_SSID "AsefaIoT"
-// #define WIFI_PASSWORD "Asf026867766"
-
-// /////////// Configures static IP address//////////////////////
-// IPAddress local_IP(172, 16, 110, 70);
-// // Set your Gateway IP address
-// IPAddress gateway(172, 16, 110, 254);
-// IPAddress subnet(255, 255, 255, 0);
-// IPAddress primaryDNS(8, 8, 8, 8);
-// /////////////////////////////////////////////////////////////
+WiFiManager wm;
 
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
 
-#define re1 14  // pump ph up
-#define re2 12  // pump ph down
+#define SWrwf 32
+
+#define re1 23  // pumpup
+#define re2 15  // pump stirring
 #define re3 25  // led
 #define re4 26  // fan
 #define re5 27  // pump water
@@ -38,12 +26,12 @@ FirebaseConfig config;
 
 #define re9 21   // q FT
 #define re10 22  // q MB
-#define re11 23  // pumpup
-#define re12 15  // pump stirring
+#define re11 14  // pump ph up
+#define re12 12  // pump ph down
 
-////////////////////////////////////////////////////////////////////////////////
-int quantitysprinklerfertilizers, quantitysprinklerwater, quantityFT, quantityMB;
-int quantityphup, quantityphdown;
+//////////////////////////////////////////////////////////////
+int quantitysprinklerfertilizers, quantitysprinklerwater;
+int quantityphup, quantityphdown, quantityFT, quantityMB;
 TaskHandle_t re1TaskHandle = NULL;
 TaskHandle_t re2TaskHandle = NULL;
 TaskHandle_t re7TaskHandle = NULL;
@@ -62,23 +50,39 @@ bool reActive7 = false;
 bool reActive8 = false;
 bool reActive9 = false;
 bool reActive10 = false;
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 float h;
 float t;
 float pHValue;
 
 bool microbial, fertilizers, pumpStirring, pumpUP;
-bool fertilizersState, waterState;
+bool fertilizersState, waterstatehigh, waterstatelow;
 
-bool fan, led, sprinklerwater, valve, re1state, re2state, re3state, re4state;
+bool fan, re1state, re2state, re3state, re4state;
 bool Autosystem, pumpwater, sprinklerfertilizers;
-bool pumpphUP, pumpphDown;
+bool pumpphUP, pumpphDown, led, sprinklerwater, valve;
 
+void connect() {
+  wm.setClass("invert");
+  wm.setConfigPortalTimeout(60);  // auto close configportal after n seconds
+  if (wm.autoConnect("@hydroponic farm")) {
+    Serial.println("");
+    Serial.println("Connected already WiFi : ");
+    Serial.println("IP Address : ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("failed to connect");
+    delay(1000);
+    ESP.restart();
+  }
+}
 void setup() {
+  Serial.begin(115200);
+  pinMode(SWrwf, INPUT_PULLUP);
+
   // กำหนดค่าขา GPIO 16 เป็นขา RX
   pinMode(16, INPUT);
-
   // กำหนดค่าขา GPIO 17 เป็นขา TX
   pinMode(17, OUTPUT);
 
@@ -86,12 +90,10 @@ void setup() {
   pinMode(re2, OUTPUT);
   pinMode(re3, OUTPUT);
   pinMode(re4, OUTPUT);
-
   pinMode(re5, OUTPUT);
   pinMode(re6, OUTPUT);
   pinMode(re7, OUTPUT);
   pinMode(re8, OUTPUT);
-
   pinMode(re9, OUTPUT);
   pinMode(re10, OUTPUT);
   pinMode(re11, OUTPUT);
@@ -107,27 +109,27 @@ void setup() {
   digitalWrite(re8, 1);
   digitalWrite(re9, 1);
   digitalWrite(re10, 1);
-
   digitalWrite(re11, 0);
   digitalWrite(re12, 1);
-  delay(100);
+  delay(10);
 
+  connect();
   // ////// Configures static IP address//////////////////////////////
   // if (!WiFi.config(local_IP, gateway, subnet, primaryDNS)) {
   //   Serial.println("STA Failed to configure");
   // }
   // /////////////////////////////////////////////////////////////////
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi ;p");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(300);
-  }
+  // WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  // Serial.print("Connecting to Wi-Fi ;p");
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   Serial.print(".");
+  //   delay(100);
+  // }
   //print localIP
-  Serial.println();
-  Serial.print("Connected with IP: ");
-  Serial.println(WiFi.localIP());
+  // Serial.println();
+  // Serial.print("Connected with IP: ");
+  // Serial.println(WiFi.localIP());
   // Serial.println();
 
   // Print ESP MAC Address
@@ -142,8 +144,20 @@ void setup() {
   Firebase.begin(DATABASE_URL, API_KEY);
   Firebase.setDoubleDigits(5);
 
-  Serial.begin(115200);
   Serial2.begin(115200);
+  delay(1000);
+}
+void Wifi_Reset() {
+  if (digitalRead(SWrwf) == LOW) {
+    Serial.println("Wifi Reset? watting 2S..");
+    delay(2000);
+    if (digitalRead(SWrwf) == LOW) {
+      delay(10);
+      Serial.println("wifi Reset Setting ..OK");
+      wm.resetSettings();
+      ESP.restart();
+    }
+  }
 }
 void re1quantity(void *arg) {
   Serial.println("****re1*****");
@@ -315,10 +329,6 @@ int split(String data, char separator, String *output, int outputSize) {
   return count;
 }
 
-bool isConnected() {
-  return WiFi.status() == WL_CONNECTED;
-}
-
 bool getBoolFromFirebase(FirebaseData &fbdo, const char *path, bool &variable) {
   if (Firebase.getBool(fbdo, path)) {
     Serial.printf("Get bool %s -->  %s\n", path, String(fbdo.to<bool>()).c_str());
@@ -330,18 +340,30 @@ bool getBoolFromFirebase(FirebaseData &fbdo, const char *path, bool &variable) {
   delay(1);
   return variable;
 }
+bool getFloatFromFirebase(FirebaseData &fbdo, const char *path, float &variable) {
+  if (Firebase.getFloat(fbdo, path)) {
+    Serial.printf("Get float %s -->  %.2f\n", path, fbdo.to<float>());
+    variable = fbdo.to<float>();
+  } else {
+    Serial.printf("Failed to get float %s. Setting to 0.0. Error: %s\n", path, fbdo.errorReason().c_str());
+    variable = 0.0;
+  }
+  delay(1);
+  return variable;
+}
 void setFloatToFirebase(FirebaseData &fbdo, const char *path, float value) {
   if (fbdo.httpConnected()) {
     Firebase.setFloat(fbdo, path, value);
+    Serial.println("set");
     delay(1);
   } else {
     Serial.println("Not connected to Firebase. Skipping setFloat operation.");
   }
 }
-// Function to set boolean value to Firebase and handle errors
 void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
   if (fbdo.httpConnected()) {
     Firebase.setBool(fbdo, path, value);
+    Serial.println("set");
     delay(1);
   } else {
     Serial.println("Not connected to Firebase. Skipping setBool operation.");
@@ -350,33 +372,42 @@ void setBoolToFirebase(FirebaseData &fbdo, const char *path, bool value) {
 
 void loop() {
 
+  while (WiFi.status() != WL_CONNECTED) {
+    connect();
+  }
+
+  Wifi_Reset();
+
   ///////รับค่าจากเซนเซอร์///////////////
   serialEvent();
   // รับข้อมูล
   String data = Serial2.readStringUntil('\n');
 
   // แยกข้อมูล
-  String values[4];                             // ประกาศอาร์เรย์เพื่อเก็บค่าที่แยก
-  int numValues = split(data, '|', values, 4);  // ใช้ฟังก์ชันแยกเพื่อเติมอาร์เรย์
+  String values[5];                             // ประกาศอาร์เรย์เพื่อเก็บค่าที่แยก
+  int numValues = split(data, '|', values, 5);  // ใช้ฟังก์ชันแยกเพื่อเติมอาร์เรย์
 
   // ตรวจสอบค่าที่รับมา
-  if (numValues == 4) {  // ตรวจสอบว่าได้รับค่าทั้งหมดหรือไม่
+  if (numValues == 5) {  // ตรวจสอบว่าได้รับค่าทั้งหมดหรือไม่
     // fertilizersState = values[0].equals("1");
-    waterState = values[0].equals("1");
-    h = values[1].toFloat();
-    t = values[2].toFloat();
-    pHValue = values[3].toFloat();
+    // waterstatehigh, waterstatelow
+    waterstatehigh = values[0].equals("1");
+    waterstatelow = values[1].equals("1");
+    h = values[2].toFloat();
+
+    t = values[3].toFloat();
+
+    pHValue = values[4].toFloat();
 
     // แสดงข้อมูล
-    // Serial.println("");
-    // Serial.print("Fertilizers State: ");
-    // if (fertilizersState) {
-    //   Serial.println("true");
-    // } else {
-    //   Serial.println("false");
-    // }
-    Serial.print("Water State: ");
-    if (waterState) {
+    Serial.print("Water State High: ");
+    if (waterstatehigh) {
+      Serial.println("true");
+    } else {
+      Serial.println("false");
+    }
+    Serial.print("Water State Low: ");
+    if (waterstatelow) {
       Serial.println("true");
     } else {
       Serial.println("false");
@@ -389,23 +420,29 @@ void loop() {
     Serial.println(pHValue);
     Serial.println("");
     Serial.println("----------------------------------");
-
-    // ลบข้อมูลที่อ่านมาทั้งหมด กันข้อมูลแถวยาวววว
-    Serial2.flush();
+    Serial2.flush();  // ลบข้อมูลที่อ่านมาทั้งหมด กันข้อมูลแถวยาวววว
   }
   ///////////////////////////////////
-
   if (Firebase.ready()) {
     Autosystem = Firebase.getBool(fbdo, "/Autosystem");
     Autosystem = fbdo.to<bool>();
 
     if (Autosystem == true) {
+      //เอาไว้กันไม่ให้ set ค่าตอนเครืองรี == 0
+      if (t == 0 && h == 0 && pHValue == 0) {
+        getBoolFromFirebase(fbdo, "/waterstatehigh", waterstatehigh);
+        getBoolFromFirebase(fbdo, "/waterstatelow", waterstatelow);
+        getFloatFromFirebase(fbdo, "/Temperature", t);
+        getFloatFromFirebase(fbdo, "/Humidity", h);
+        getFloatFromFirebase(fbdo, "/pHValue", pHValue);
+      }
       ////////////////////////////////เขียนข้อมูลเซนเซอร์ลงfirebase////////////////
       setFloatToFirebase(fbdo, "/pHValue", pHValue);
       setFloatToFirebase(fbdo, "/Humidity", h);  // Percentage value
       setFloatToFirebase(fbdo, "/Temperature", t);
       // setBoolToFirebase(fbdo, "/fertilizersstate", fertilizersState);
-      setBoolToFirebase(fbdo, "/waterstate", waterState);
+      setBoolToFirebase(fbdo, "/waterstatehigh", waterstatehigh);
+      setBoolToFirebase(fbdo, "/waterstatelow", waterstatelow);
       /////////////////////////////////////////////////////////////////////////
       if (Firebase.getInt(fbdo, "/quantitysprinklerfertilizers")) {
         quantitysprinklerfertilizers = fbdo.to<int>();
@@ -461,7 +498,6 @@ void loop() {
           re10Finished = false;
         }
       }
-
       if (Firebase.getInt(fbdo, "/quantityphup")) {
         quantityphup = fbdo.to<int>();
         if (quantityphup != 0 && re1TaskHandle == NULL) {
@@ -490,34 +526,92 @@ void loop() {
           re2Finished = false;
         }
       }
-      getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
       getBoolFromFirebase(fbdo, "/relaystate/valve", valve);
+      NFRE(valve, re6);
       getBoolFromFirebase(fbdo, "/relaystate/led", led);
+      NFRE(led, re3);
       getBoolFromFirebase(fbdo, "/relaystate/pumpwater", pumpwater);
+      NFRE(pumpwater, re5);
       getBoolFromFirebase(fbdo, "/relaystate/fan", fan);
-      getBoolFromFirebase(fbdo, "/relaystate/sprinklerwater", sprinklerwater);
+      NFRE(fan, re4);
       getBoolFromFirebase(fbdo, "/relaystate/pumpphUP", pumpphUP);
       getBoolFromFirebase(fbdo, "/relaystate/pumpphDown", pumpphDown);
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerfertilizers", sprinklerfertilizers);
+      getBoolFromFirebase(fbdo, "/relaystate/sprinklerwater", sprinklerwater);
       getBoolFromFirebase(fbdo, "/relaystate/fertilizers", fertilizers);
       getBoolFromFirebase(fbdo, "/relaystate/microbial", microbial);
       getBoolFromFirebase(fbdo, "/relaystate/pumpStirring", pumpStirring);
       getBoolFromFirebase(fbdo, "/relaystate/pumpUP", pumpUP);
       Serial.println("+++++++++++++++++++++++++++");
 
-      NFRE(led, re3);
-      delay(10);
+      // NFRE(led, re3);
+      // delay(10);
 
-      NFRE(fan, re4);
-      delay(10);
+      // NFRE(fan, re4);
+      // delay(10);
 
-      NFRE(pumpwater, re5);
-      delay(10);
+      // NFRE(pumpwater, re5);
+      // delay(10);
+
+      // NFRE(valve, re6);
+      // delay(10);
+
+      // Serial.println("-------------------------------");
+
+      if (!reActive1) {
+        NFRE(pumpphUP, re1);
+        delay(500);
+      }
+      if (!reActive2) {
+        NFRE(pumpphDown, re2);
+        delay(500);
+      }
+      if (!reActive7) {
+        NFRE(sprinklerfertilizers, re7);
+        delay(500);
+      }
+      if (!reActive8) {
+        NFRE(sprinklerwater, re8);
+        delay(500);
+      }
+      if (!reActive9) {
+        NFRE(fertilizers, re9);
+        delay(500);
+      }
+      if (!reActive10) {
+        NFRE(microbial, re10);
+        delay(500);
+      }
+      // NFRE(pumpUP, re11);
+      // delay(10);
+
+      // NFRE(pumpStirring, re12);
+      // delay(10);
+
+      if (microbial || fertilizers || pumpphUP || pumpphDown) {
+        digitalWrite(re11, 1);
+        digitalWrite(re12, 0);
+      }
+
+      if (!reActive1 && !reActive2 && !reActive9 && !reActive10 && !microbial && !fertilizers && !pumpphUP && !pumpphDown) {
+        digitalWrite(re11, 0);
+        digitalWrite(re12, 1);
+      }
+      Serial.println("----------------------------------------------------");
+      Serial.println();
+    } else {  //ถ้าเน็ตหลุดให้ทำการอะไร
+      // connect();
+      Serial.println("manual mode");
+      delay(1000);
 
       NFRE(valve, re6);
       delay(10);
-
-      Serial.println("-------------------------------");
-
+      NFRE(led, re3);
+      delay(10);
+      NFRE(pumpwater, re5);
+      delay(10);
+      NFRE(fan, re4);
+      delay(10);
       if (!reActive1) {
         NFRE(pumpphUP, re1);
         delay(10);
@@ -542,11 +636,6 @@ void loop() {
         NFRE(microbial, re10);
         delay(10);
       }
-      // NFRE(pumpUP, re11);
-      // delay(10);
-
-      // NFRE(pumpStirring, re12);
-      // delay(10);
 
       if (microbial || fertilizers || pumpphUP || pumpphDown) {
         digitalWrite(re11, 1);
@@ -557,12 +646,7 @@ void loop() {
         digitalWrite(re11, 0);
         digitalWrite(re12, 1);
       }
-      Serial.println("----------------------------------------------------");
-      Serial.println();
-    } else if (Autosystem == false) {  //ถ้าเน็ตหลุดให้ทำการอะไร
-      isConnected();
-      Serial.println("manual mode");
-      delay(1000);
+      // ESP.restart();
     }
   }
 }
