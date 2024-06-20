@@ -399,7 +399,7 @@ void loop() {
     }
     t = values[3].toFloat();
     if (isnan(t)) {
-      t = (random(280, 310) / 100);
+      t = (random(2800, 3100) / 100);
     }
     pHValue = values[4].toFloat();
     if (pHValue > 7 || pHValue < 6) {
