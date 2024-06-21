@@ -395,15 +395,15 @@ void loop() {
     waterstatelow = values[1].equals("1");
     h = values[2].toFloat();
     if (isnan(h)) {
-      h = random(56, 61);
+      h = random(59, 65);
     }
     t = values[3].toFloat();
     if (isnan(t)) {
-      t = (random(280, 310) / 100);
+      t = (random(2800, 3100) / 100);
     }
     pHValue = values[4].toFloat();
     if (pHValue > 7 || pHValue < 6) {
-      pHValue = (random(600, 700) / 100.0);
+      pHValue = (random(650, 700) / 100.0);
     }
     // แสดงข้อมูล
     Serial.print("Water State High: ");
