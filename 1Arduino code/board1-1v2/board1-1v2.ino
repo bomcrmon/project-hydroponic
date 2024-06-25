@@ -394,9 +394,7 @@ void loop() {
     waterstatehigh = values[0].equals("1");
     waterstatelow = values[1].equals("1");
     h = values[2].toFloat();
-
     t = values[3].toFloat();
-
     pHValue = values[4].toFloat();
 
     // แสดงข้อมูล
