@@ -388,8 +388,8 @@ void loop() {
 
   Wifi_Reset();
   ////////เช็คค่า ph ///////
-  Serial.print("setph = ");
-  Serial.println(setph);
+  // Serial.print("setph = ");
+  // Serial.println(setph);
   ///////รับค่าจากเซนเซอร์///////////////
   serialEvent();
   // รับข้อมูล
