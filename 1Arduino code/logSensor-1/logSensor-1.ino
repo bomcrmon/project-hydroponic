@@ -28,7 +28,6 @@ FirebaseData firebaseData;
 
 unsigned long previousMillis = 0;
 const long interval = 3600000;  // 1 ชั่วโมง (3600000 มิลลิวินาที)
-// const long interval = 60000;  // 1 นาที (60000 มิลลิวินาที)
 
 void setup() {
   Serial.begin(115200);
@@ -49,9 +48,6 @@ void setup() {
   // เริ่มการเชื่อมต่อ Firebase
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   Firebase.reconnectWiFi(true);
-
-  // เรียกใช้ฟังก์ชันจำลองข้อมูล
-  // simulateDataAndSend();
 }
 
 void loop() {
@@ -100,7 +96,16 @@ void loop() {
     Serial.print("pH: ");
     Serial.println(ph);
   }
+
+  // ตรวจสอบค่าที่ได้รับจากคีย์บอร์ด
+  if (Serial.available() > 0) {
+    char input = Serial.read();
+    if (input == '1') {
+      simulateDataAndSend();
+    }
+  }
 }
+
 void simulateDataAndSend() {
   // อัปเดตเวลา NTP
   timeClient.update();
