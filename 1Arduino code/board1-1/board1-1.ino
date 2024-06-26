@@ -3,15 +3,27 @@
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
 #include <WiFiManager.h>
+#include <NTPClient.h>
+#include <TimeLib.h>
 
 #define API_KEY "AIzaSyDC4RoIxtD36gbhFYJeCGEPFXgqDbhk2Cw"
 #define DATABASE_URL "https://test-esp32-14072-default-rtdb.firebaseio.com/"
+
+// ตั้งค่าเวลา NTP เซิร์ฟเวอร์
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 25200, 60000);  // 25200 วินาที เท่ากับ GMT+7
+// ตัวแปรที่เก็บเวลาปัจจุบัน
+String timeset;
 
 WiFiManager wm;
 
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
+
+unsigned long previousMillis = 0;
+const long interval = 3600000;  // 1 ชั่วโมง (3600000 มิลลิวินาที)
+// const long interval = 60000;  // 1 นาที (60000 มิลลิวินาที)
 
 #define SWrwf 32
 
@@ -30,6 +42,11 @@ FirebaseConfig config;
 #define re12 12  // pump ph down
 
 //////////////////////////////////////////////////////////////
+// ตัวแปรสำหรับเก็บค่าความชื้น อุณหภูมิ และค่า pH
+float humidity = 50.0;     // ตัวอย่างค่าความชื้น
+float temperature = 25.0;  // ตัวอย่างค่าอุณหภูมิ
+float ph = 7.0;            // ตัวอย่างค่าพีเอช
+
 float setph = 600;
 int quantitysprinklerfertilizers, quantitysprinklerwater;
 int quantityphup, quantityphdown, quantityFT, quantityMB;
@@ -141,6 +158,9 @@ void setup() {
 
   config.api_key = API_KEY;
   config.database_url = DATABASE_URL;
+
+  // เริ่ม NTPClient
+  timeClient.begin();
 
   Firebase.begin(DATABASE_URL, API_KEY);
   Firebase.setDoubleDigits(5);
@@ -385,6 +405,19 @@ void loop() {
   while (WiFi.status() != WL_CONNECTED) {
     connect();
   }
+  timeClient.update();
+
+  // รับค่าเวลาแบบ epoch
+  unsigned long epochTime = timeClient.getEpochTime();
+
+  // ตั้งค่าเวลาในไลบรารี TimeLib
+  setTime(epochTime);
+
+  // จัดรูปแบบวันที่และเวลาเป็นสตริง
+  timeset = String(year()) + "-" + String(month()) + "-" + String(day()) + " " + String(hour()) + ":" + String(minute()) + ":" + String(second());
+
+  // ตรวจสอบเวลาปัจจุบัน
+  unsigned long currentMillis = millis();
 
   Wifi_Reset();
   ////////เช็คค่า ph ///////
@@ -442,6 +475,37 @@ void loop() {
   }
   ///////////////////////////////////
   if (Firebase.ready()) {
+
+    if (currentMillis - previousMillis >= interval) {
+      previousMillis = currentMillis;
+      humidity = h;     // ตัวอย่างค่าความชื้น
+      temperature = t;  // ตัวอย่างค่าอุณหภูมิ
+      ph = pHValue;
+      // สร้าง JSON object
+      FirebaseJson json;
+      json.set("timestamp", timeset);
+      json.set("humidity", humidity);
+      json.set("temperature", temperature);
+      json.set("ph", ph);
+
+      // ส่งข้อมูลไปยัง Firebase
+      if (Firebase.pushJSON(fbdo, "/logSensor", json)) {
+        Serial.println("Data sent to Firebase successfully");
+      } else {
+        Serial.println("Failed to send data to Firebase");
+        Serial.println(fbdo.errorReason());
+      }
+
+      // แสดงผลข้อมูล
+      Serial.print("Current Date and Time: ");
+      Serial.println(timeset);
+      Serial.print("Humidity: ");
+      Serial.println(humidity);
+      Serial.print("Temperature: ");
+      Serial.println(temperature);
+      Serial.print("pH: ");
+      Serial.println(ph);
+    }
     Autosystem = Firebase.getBool(fbdo, "/Autosystem");
     Autosystem = fbdo.to<bool>();
 
