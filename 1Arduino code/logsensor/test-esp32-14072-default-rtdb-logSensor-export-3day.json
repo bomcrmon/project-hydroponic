@@ -1,0 +1,356 @@
+{
+  "-O0GujztZ-6y5uuT55E5": {
+    "humidity": 70,
+    "ph": 65.38,
+    "temperature": 25,
+    "timestamp": "2024-6-26 7:21:12"
+  },
+  "-O0Guk3oVzy3KX2u9kIL": {
+    "humidity": 69,
+    "ph": 66.53,
+    "temperature": 26,
+    "timestamp": "2024-6-26 8:21:12"
+  },
+  "-O0Guk8_TcVLKlJpLw9q": {
+    "humidity": 68,
+    "ph": 67.89,
+    "temperature": 27,
+    "timestamp": "2024-6-26 9:21:12"
+  },
+  "-O0GukDPN_uMnu4pcZq1": {
+    "humidity": 68,
+    "ph": 67.76,
+    "temperature": 27,
+    "timestamp": "2024-6-26 10:21:12"
+  },
+  "-O0GukICH6v9VklNl-5c": {
+    "humidity": 68,
+    "ph": 67.36,
+    "temperature": 28,
+    "timestamp": "2024-6-26 11:21:12"
+  },
+  "-O0GukN12anM-fpbU2ux": {
+    "humidity": 68,
+    "ph": 67.12,
+    "temperature": 28,
+    "timestamp": "2024-6-26 12:21:12"
+  },
+  "-O0GukRlsOeU4SGBNnlc": {
+    "humidity": 67,
+    "ph": 67.89,
+    "temperature": 29,
+    "timestamp": "2024-6-26 13:21:12"
+  },
+  "-O0GukX0s7ddycXK3BZ9": {
+    "humidity": 67,
+    "ph": 67.51,
+    "temperature": 29,
+    "timestamp": "2024-6-26 14:21:12"
+  },
+  "-O0GukaQlVEbtAFVotci": {
+    "humidity": 66,
+    "ph": 66.77,
+    "temperature": 30,
+    "timestamp": "2024-6-26 15:21:12"
+  },
+  "-O0GukfDquBSS7PGF861": {
+    "humidity": 66,
+    "ph": 67.53,
+    "temperature": 30,
+    "timestamp": "2024-6-26 16:21:12"
+  },
+  "-O0Gukk5Hchv1C2Y5FBL": {
+    "humidity": 66,
+    "ph": 67.68,
+    "temperature": 29,
+    "timestamp": "2024-6-26 17:21:12"
+  },
+  "-O0GukomgxcOG0rUPJkI": {
+    "humidity": 66,
+    "ph": 66.19,
+    "temperature": 29,
+    "timestamp": "2024-6-26 18:21:12"
+  },
+  "-O0GuktceLd7_zpPaaCG": {
+    "humidity": 65,
+    "ph": 66.86,
+    "temperature": 28,
+    "timestamp": "2024-6-26 19:21:12"
+  },
+  "-O0GukxZudphxJFcB1Bb": {
+    "humidity": 65,
+    "ph": 67.38,
+    "temperature": 27,
+    "timestamp": "2024-6-26 20:21:12"
+  },
+  "-O0Gul2DLQz5dVCmpmKR": {
+    "humidity": 64,
+    "ph": 66.3,
+    "temperature": 27,
+    "timestamp": "2024-6-26 21:21:12"
+  },
+  "-O0Gul70_V0A7J8QYUEU": {
+    "humidity": 64,
+    "ph": 67.67,
+    "temperature": 27,
+    "timestamp": "2024-6-26 22:21:12"
+  },
+  "-O0GulBnEtbkLi8wShsF": {
+    "humidity": 65,
+    "ph": 66.37,
+    "temperature": 26,
+    "timestamp": "2024-6-26 23:21:12"
+  },
+  "-O0GulGaWKJtAu30J7Xm": {
+    "humidity": 65,
+    "ph": 66.62,
+    "temperature": 26,
+    "timestamp": "2024-6-27 0:21:12"
+  },
+  "-O0GulLOZYnIlPy82fL0": {
+    "humidity": 67,
+    "ph": 66.48,
+    "temperature": 25,
+    "timestamp": "2024-6-27 1:21:12"
+  },
+  "-O0GulQB1kSUgHZwoULB": {
+    "humidity": 68,
+    "ph": 66.64,
+    "temperature": 25,
+    "timestamp": "2024-6-27 2:21:12"
+  },
+  "-O0GulV0xSywzjQt10J4": {
+    "humidity": 68,
+    "ph": 65.26,
+    "temperature": 25,
+    "timestamp": "2024-6-27 3:21:12"
+  },
+  "-O0GulZlinl277_HmCL9": {
+    "humidity": 69,
+    "ph": 66.99,
+    "temperature": 25,
+    "timestamp": "2024-6-27 4:21:12"
+  },
+  "-O0GuldacDJ--x22iSc9": {
+    "humidity": 69,
+    "ph": 67.42,
+    "temperature": 25,
+    "timestamp": "2024-6-27 5:21:12"
+  },
+  "-O0GuliOJ2O0RBtnW0iK": {
+    "humidity": 70,
+    "ph": 66.16,
+    "temperature": 25,
+    "timestamp": "2024-6-27 6:21:12"
+  },
+  "-O0HJnPq5YlLy1mwU_6n": {
+    "humidity": 61,
+    "ph": 66.21,
+    "temperature": 28,
+    "timestamp": "2024-6-26 9:15:1"
+  },
+  "-O0HXXKAKvjYgqsyetq-": {
+    "humidity": 63,
+    "ph": 65.93,
+    "temperature": 28,
+    "timestamp": "2024-6-26 10:15:1"
+  },
+  "-O0HkGDYdAznCmF7tiaS": {
+    "humidity": 63,
+    "ph": 67,
+    "temperature": 28,
+    "timestamp": "2024-6-26 11:15:2"
+  },
+  "-O0Hy-Ag6AN5x81LeBOI": {
+    "humidity": 63,
+    "ph": 66.86,
+    "temperature": 28,
+    "timestamp": "2024-6-26 12:15:2"
+  },
+  "-O0IAj4dR2nRNsnmmlsw": {
+    "humidity": 61,
+    "ph": 66.2,
+    "temperature": 29,
+    "timestamp": "2024-6-26 13:15:2"
+  },
+  "-O0IOSzzmSDJ0CaIlZMW": {
+    "humidity": 60,
+    "ph": 65.79,
+    "temperature": 27,
+    "timestamp": "2024-6-26 14:15:1"
+  },
+  "-O0IbBuEcevQznP5jYbS": {
+    "humidity": 65,
+    "ph": 67.89,
+    "temperature": 29,
+    "timestamp": "2024-6-26 15:15:1"
+  },
+  "-O0Iovnd72yXiRXqmI05": {
+    "humidity": 61,
+    "ph": 67.9,
+    "temperature": 27,
+    "timestamp": "2024-6-26 16:15:2"
+  },
+  "-O0J1evPySY_iUTYLbTH": {
+    "humidity": 63,
+    "ph": 66.36,
+    "temperature": 27,
+    "timestamp": "2024-6-26 17:15:2"
+  },
+  "-O0JFOel3QCXXpns8At9": {
+    "humidity": 65,
+    "ph": 66.2,
+    "temperature": 29,
+    "timestamp": "2024-6-26 18:15:2"
+  },
+  "-O0JT7ads47tSvfk1OdM": {
+    "humidity": 63,
+    "ph": 66.28,
+    "temperature": 29,
+    "timestamp": "2024-6-26 19:15:2"
+  },
+  "-O0K1t_Gr7-nwAYIPJVd": {
+    "humidity": 64,
+    "ph": 65.08,
+    "temperature": 28,
+    "timestamp": "2024-6-26 21:55:39"
+  },
+  "-O0KFcUe35FuwcJT_MxN": {
+    "humidity": 65,
+    "ph": 66.47,
+    "temperature": 29,
+    "timestamp": "2024-6-26 22:55:40"
+  },
+  "-O0KTMP-7ZlU3rx26MXB": {
+    "humidity": 62,
+    "ph": 67.74,
+    "temperature": 29,
+    "timestamp": "2024-6-26 23:55:40"
+  },
+  "-O0Kg5JCYJ0T-wgYpkDc": {
+    "humidity": 65,
+    "ph": 66.99,
+    "temperature": 27,
+    "timestamp": "2024-6-27 0:55:40"
+  },
+  "-O0KtpDZUvMLcfxHzFKi": {
+    "humidity": 64,
+    "ph": 65.1,
+    "temperature": 29,
+    "timestamp": "2024-6-27 1:55:40"
+  },
+  "-O0L6Z8Dn5Giw7o71N5X": {
+    "humidity": 61,
+    "ph": 66.23,
+    "temperature": 27,
+    "timestamp": "2024-6-27 2:55:40"
+  },
+  "-O0LKI3cmDOfn7XemOHN": {
+    "humidity": 62,
+    "ph": 66.36,
+    "temperature": 28,
+    "timestamp": "2024-6-27 3:55:40"
+  },
+  "-O0LY0yt2kMcXRncpiic": {
+    "humidity": 61,
+    "ph": 67.44,
+    "temperature": 27,
+    "timestamp": "2024-6-27 4:55:40"
+  },
+  "-O0LkkulP9mOsK8Dijsd": {
+    "humidity": 64,
+    "ph": 66.98,
+    "temperature": 27,
+    "timestamp": "2024-6-27 5:55:40"
+  },
+  "-O0LyUp3j75RPexLyPMb": {
+    "humidity": 62,
+    "ph": 65.8,
+    "temperature": 29,
+    "timestamp": "2024-6-27 6:55:40"
+  },
+  "-O0MBDjPi5QGmaGR4vOq": {
+    "humidity": 65,
+    "ph": 67.54,
+    "temperature": 27,
+    "timestamp": "2024-6-27 7:55:40"
+  },
+  "-O0MOxfJECafsBpkitMA": {
+    "humidity": 65,
+    "ph": 67.96,
+    "temperature": 28,
+    "timestamp": "2024-6-27 8:55:40"
+  },
+  "-O0MbgYxJZhYTMkuVe-D": {
+    "humidity": 62,
+    "ph": 67.18,
+    "temperature": 28,
+    "timestamp": "2024-6-27 9:55:40"
+  },
+  "-O0MpQUuHEO5VZKVYNHr": {
+    "humidity": 60,
+    "ph": 65.24,
+    "temperature": 29,
+    "timestamp": "2024-6-27 10:55:40"
+  },
+  "-O0N29P72o6LYhUeipwG": {
+    "humidity": 62,
+    "ph": 67.62,
+    "temperature": 27,
+    "timestamp": "2024-6-27 11:55:40"
+  },
+  "-O0NFtL7ThnEY8QcUaFY": {
+    "humidity": 65,
+    "ph": 65.96,
+    "temperature": 28,
+    "timestamp": "2024-6-27 12:55:40"
+  },
+  "-O0NTcDiI4O9UlSmZ3mg": {
+    "humidity": 61,
+    "ph": 66.51,
+    "temperature": 27,
+    "timestamp": "2024-6-27 13:55:40"
+  },
+  "-O0NgM7XLfuWZ36PSee3": {
+    "humidity": 61,
+    "ph": 66.35,
+    "temperature": 29,
+    "timestamp": "2024-6-27 14:55:40"
+  },
+  "-O0Nu540MB_-SzvpnY1y": {
+    "humidity": 64,
+    "ph": 66.81,
+    "temperature": 29,
+    "timestamp": "2024-6-27 15:55:40"
+  },
+  "-O0O6p-qKrnEyV_apvdw": {
+    "humidity": 64,
+    "ph": 65.05,
+    "temperature": 27,
+    "timestamp": "2024-6-27 16:55:40"
+  },
+  "-O0OKYtbZhuNCCDjze3t": {
+    "humidity": 64,
+    "ph": 67.63,
+    "temperature": 27,
+    "timestamp": "2024-6-27 17:55:40"
+  },
+  "-O0OYHpWSbdlQZTMYeKO": {
+    "humidity": 61,
+    "ph": 65.32,
+    "temperature": 28,
+    "timestamp": "2024-6-27 18:55:40"
+  },
+  "-O0Ol0jthISD0Rt-VbVf": {
+    "humidity": 65,
+    "ph": 67.5,
+    "temperature": 27,
+    "timestamp": "2024-6-27 19:55:40"
+  },
+  "-O0OykeDAYRXrkuTXDIG": {
+    "humidity": 64,
+    "ph": 67.18,
+    "temperature": 29,
+    "timestamp": "2024-6-27 20:55:41"
+  }
+}
