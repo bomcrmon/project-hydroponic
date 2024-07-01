@@ -71,15 +71,16 @@ void loop() {
     temperature = random(27, 30);     // ตัวอย่างค่าอุณหภูมิ
     ph = random(6500, 6800) / 100.0;  // ตัวอย่างค่า pH
 
-    // สร้าง JSON object
+    // สร้าง JSON object โดยใช้ timestamp เป็นคีย์หลัก
     FirebaseJson json;
-    json.set("timestamp", timeset);
-    json.set("humidity", humidity);
-    json.set("temperature", temperature);
-    json.set("ph", ph);
+    FirebaseJson dataJson;
+    dataJson.set("humidity", humidity);
+    dataJson.set("temperature", temperature);
+    dataJson.set("ph", ph);
+    json.set(timeset.c_str(), dataJson);
 
     // ส่งข้อมูลไปยัง Firebase
-    if (Firebase.pushJSON(firebaseData, "/logSensor", json)) {
+    if (Firebase.updateNode(firebaseData, "/logSensor", json)) {
       Serial.println("Data sent to Firebase successfully");
     } else {
       Serial.println("Failed to send data to Firebase");
@@ -125,15 +126,16 @@ void simulateDataAndSend() {
     temperature = random(27, 30);     // ตัวอย่างค่าอุณหภูมิ
     ph = random(6500, 6800) / 100.0;  // ตัวอย่างค่า pH
 
-    // สร้าง JSON object
+    // สร้าง JSON object โดยใช้ timestamp เป็นคีย์หลัก
     FirebaseJson json;
-    json.set("timestamp", timeset);
-    json.set("humidity", humidity);
-    json.set("temperature", temperature);
-    json.set("ph", ph);
+    FirebaseJson dataJson;
+    dataJson.set("humidity", humidity);
+    dataJson.set("temperature", temperature);
+    dataJson.set("ph", ph);
+    json.set(timeset.c_str(), dataJson);
 
     // ส่งข้อมูลไปยัง Firebase
-    if (Firebase.pushJSON(firebaseData, "/logSensor", json)) {
+    if (Firebase.updateNode(firebaseData, "/logSensor", json)) {
       Serial.println("Data sent to Firebase successfully");
     } else {
       Serial.println("Failed to send data to Firebase");
