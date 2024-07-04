@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Flowchart">
+    <mxGraphModel dx="1093" dy="431" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="เริ่มต้น (Start)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="30" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="initialize" value="ตั้งค่าการทำงาน (Initialization)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="130" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="main_loop" value="วนซ้ำหลัก (Main Loop)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="270" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="water_level_high" value="ตรวจสอบระดับน้ำสูง (WaterLevelH)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="water_level_low" value="ตรวจสอบระดับน้ำต่ำ (WaterLevelL)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="450" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="read_humi_temp" value="อ่านค่าเซ็นเซอร์ความชื้นและอุณหภูมิ (ReadHumiTemp)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="540" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="read_ph" value="อ่านค่าเซ็นเซอร์ pH (PHsensor)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="630" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="serial_event" value="ตรวจสอบการสื่อสารผ่าน Serial (serialEvent)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="720" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="send_data" value="ส่งข้อมูลเซ็นเซอร์ผ่าน Serial" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="810" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="delay" value="หน่วงเวลา (500 ms)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="900" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_start_initialize" edge="1" parent="1" source="start" target="initialize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_initialize_main_loop" edge="1" parent="1" source="initialize" target="main_loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_main_loop_water_level_high" edge="1" parent="1" source="main_loop" target="water_level_high">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_water_level_high_water_level_low" edge="1" parent="1" source="water_level_high" target="water_level_low">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_water_level_low_read_humi_temp" edge="1" parent="1" source="water_level_low" target="read_humi_temp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_read_humi_temp_read_ph" edge="1" parent="1" source="read_humi_temp" target="read_ph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_read_ph_serial_event" edge="1" parent="1" source="read_ph" target="serial_event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_serial_event_send_data" edge="1" parent="1" source="serial_event" target="send_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_send_data_delay" edge="1" parent="1" source="send_data" target="delay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_delay_main_loop" edge="1" parent="1" source="delay" target="main_loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

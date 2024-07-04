@@ -1,0 +1,79 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Flowchart">
+    <mxGraphModel dx="1093" dy="431" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="เริ่มต้น" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="30" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="initialize" value="การเตรียมค่าเริ่มต้น:&#10;- WiFi&#10;- Firebase&#10;- NTP&#10;- Pin&#10;- ค่าเริ่มต้นรีเลย์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="130" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="connect_wifi" value="เชื่อมต่อกับ WiFi&#10;- WiFiManager&#10;- รีลองใหม่หรือรีสตาร์ท" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="270" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="main_loop" value="วนซ้ำหลัก:" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="400" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="check_wifi" value="ตรวจสอบการเชื่อมต่อ WiFi" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="460" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="update_time" value="อัปเดตเวลาจาก NTP" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="520" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="manage_sensor_data" value="จัดการข้อมูลเซนเซอร์&#10;- อ่านเซนเซอร์&#10;- อัปเดต Firebase" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="580" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fetch_firebase_data" value="ดึงข้อมูลจาก Firebase" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="660" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="automation_control" value="ควบคุมระบบอัตโนมัติ&#10;- ตรวจสอบงาน&#10;- ดำเนินงาน&#10;- ลบงาน" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="720" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="check_reset" value="ตรวจสอบการรีเซ็ต WiFi&#10;- รีเซ็ตถ้ากดปุ่ม" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="800" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="delay" value="หน่วงเวลา (1 วินาที)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="880" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="end" value="สิ้นสุด" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_start_initialize" edge="1" parent="1" source="start" target="initialize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_initialize_connect_wifi" edge="1" parent="1" source="initialize" target="connect_wifi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_connect_wifi_main_loop" edge="1" parent="1" source="connect_wifi" target="main_loop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_main_loop_check_wifi" edge="1" parent="1" source="main_loop" target="check_wifi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_check_wifi_update_time" edge="1" parent="1" source="check_wifi" target="update_time">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_update_time_manage_sensor_data" edge="1" parent="1" source="update_time" target="manage_sensor_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_manage_sensor_data_fetch_firebase_data" edge="1" parent="1" source="manage_sensor_data" target="fetch_firebase_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_fetch_firebase_data_automation_control" edge="1" parent="1" source="fetch_firebase_data" target="automation_control">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_automation_control_check_reset" edge="1" parent="1" source="automation_control" target="check_reset">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_check_reset_delay" edge="1" parent="1" source="check_reset" target="delay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_delay_end" edge="1" parent="1" source="delay" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
