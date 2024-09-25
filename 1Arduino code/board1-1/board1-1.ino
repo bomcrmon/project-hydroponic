@@ -170,8 +170,8 @@ void setup() {
 }
 void Wifi_Reset() {
   if (digitalRead(SWrwf) == LOW) {
-    Serial.println("Wifi Reset? watting 2S..");
-    delay(2000);
+    Serial.println("Wifi Reset? watting 5S..");
+    delay(5000);
     if (digitalRead(SWrwf) == LOW) {
       delay(10);
       Serial.println("wifi Reset Setting ..OK");
